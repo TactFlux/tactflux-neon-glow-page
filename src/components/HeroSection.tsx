@@ -22,14 +22,14 @@ const HeroSection: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="text-left mb-10 md:mb-0 md:w-1/2 animate-fade-in">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-              Deine Talente. <span className="neon-text">Deine Bühne.</span>
+              Revolutionieren Sie Ihr <span className="neon-text">Recruiting</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-lg">
-              Zeige, was in dir steckt – jenseits von Lebenslauf und Zeugnissen. TactFlux revolutioniert, wie du im Bewerbungsprozess glänzen kannst.
+              Integrieren Sie TactFlux als API in Ihre HR-Prozesse und bieten Sie Bewerbern eine faire Chance, ihr volles Potenzial zu zeigen.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button 
-                onClick={() => scrollToSection('cta')}
+                onClick={() => scrollToSection('features')}
                 variant="tactflux-static"
                 className="text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
@@ -37,10 +37,10 @@ const HeroSection: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => scrollToSection('features')}
+                onClick={() => scrollToSection('pricing')}
                 className="text-tactflux-blue border-tactflux-blue/20 hover:bg-tactflux-blue/10 text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
-                Wie es funktioniert
+                Preise ansehen
               </Button>
             </div>
           </div>
@@ -54,16 +54,16 @@ const HeroSection: React.FC = () => {
                   <div className="text-sm text-gray-400">Positive Bewerber-Erfahrung</div>
                 </div>
                 <div className="glass-card p-4 h-32 flex flex-col justify-center items-center">
-                  <div className="text-3xl font-bold text-tactflux-blue">8.500+</div>
-                  <div className="text-sm text-gray-400">Bewerber entdeckt</div>
+                  <div className="text-3xl font-bold text-tactflux-blue">42%</div>
+                  <div className="text-sm text-gray-400">Kürzere Einstellungszeiten</div>
                 </div>
                 <div className="glass-card p-4 h-32 flex flex-col justify-center items-center">
                   <div className="text-3xl font-bold text-tactflux-purple">78%</div>
-                  <div className="text-sm text-gray-400">Höhere Bewerber-Zufriedenheit</div>
+                  <div className="text-sm text-gray-400">Steigerung der Employer Brand</div>
                 </div>
                 <div className="glass-card p-4 h-32 flex flex-col justify-center items-center">
-                  <div className="text-3xl font-bold text-tactflux-success">100%</div>
-                  <div className="text-sm text-gray-400">Chancengleichheit</div>
+                  <div className="text-3xl font-bold text-tactflux-success">3x</div>
+                  <div className="text-sm text-gray-400">Bessere Kandidatenpassung</div>
                 </div>
               </div>
             </div>

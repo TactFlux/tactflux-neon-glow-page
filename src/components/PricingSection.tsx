@@ -28,7 +28,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
     <div className={`glass-card p-6 relative ${isPopular ? 'transform-gpu scale-105 border border-tactflux-neon/30' : ''}`}>
       {isPopular && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-tactflux-neon text-black text-sm font-medium px-4 py-1 rounded-full">
-          Meist gewählt
+          Beliebteste Option
         </div>
       )}
       
@@ -52,7 +52,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
       
       <div>
         <Button 
-          className={`w-full ${cardGlowClass} ${borderClass}`}
+          className={`w-full ${cardGlowClass} ${borderClass} py-2`}
         >
           {buttonText}
         </Button>
@@ -64,49 +64,52 @@ const PricingCard: React.FC<PricingCardProps> = ({
 const PricingSection: React.FC = () => {
   const pricingOptions = [
     {
-      title: "Starter",
+      title: "API Starter",
       price: "399 €",
-      description: "Ideal für kleine Unternehmen",
+      description: "Ideal für Start-ups und kleine Teams",
       features: [
         "Bis zu 50 Tests pro Monat",
-        "Grundlegende Analysen",
-        "E-Mail Support",
-        "Standardisiertes Branding"
+        "Grundlegende API-Integration",
+        "Standard Creative Fit Score",
+        "Technischer Support per E-Mail",
+        "Bewerber-Dashboard Standard"
       ],
       isPopular: false,
-      buttonText: "Starter wählen",
+      buttonText: "API-Zugang anfordern",
       borderClass: "border-tactflux-blue/40 hover:border-tactflux-blue/80",
       cardGlowClass: "bg-tactflux-blue/10 hover:bg-tactflux-blue/20 text-white"
     },
     {
-      title: "Pro",
+      title: "API Business",
       price: "699 €",
-      description: "Optimal für wachsende Teams",
+      description: "Für wachsende Unternehmen",
       features: [
         "Bis zu 200 Tests pro Monat",
-        "Erweiterte Datenanalysen",
+        "Erweiterte API-Funktionen",
+        "Detaillierte Kandidatenanalysen",
+        "Branding-Anpassungen",
         "Prioritäts-Support",
-        "Anpassbares Branding",
-        "API-Zugang"
+        "Webhook-Unterstützung"
       ],
       isPopular: true,
-      buttonText: "Pro wählen",
+      buttonText: "API-Demo vereinbaren",
       borderClass: "neon-border",
       cardGlowClass: "bg-tactflux-neon hover:bg-tactflux-neon/90 text-black"
     },
     {
-      title: "Enterprise",
+      title: "API Enterprise",
       price: "Auf Anfrage",
-      description: "Maßgeschneiderte Lösungen",
+      description: "Für Konzerne und Großunternehmen",
       features: [
         "Unbegrenzte Tests",
-        "Vollständige Analyseplattform",
+        "Vollständige API-Integration",
         "Dedizierter Account Manager",
-        "Komplett anpassbare Lösung",
-        "On-Premise Option verfügbar"
+        "White-Label-Lösung möglich",
+        "On-Premise-Option",
+        "Anpassbare Analysemodelle"
       ],
       isPopular: false,
-      buttonText: "Kontaktieren Sie uns",
+      buttonText: "Enterprise-Lösung anfragen",
       borderClass: "border-tactflux-purple/40 hover:border-tactflux-purple/80",
       cardGlowClass: "bg-tactflux-purple/10 hover:bg-tactflux-purple/20 text-white"
     }
@@ -116,10 +119,10 @@ const PricingSection: React.FC = () => {
     <section className="section-container bg-gradient-to-b from-tactflux-dark to-black" id="pricing">
       <div className="text-center mb-16 animate-fade-in">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          <span className="neon-text">Transparente</span> Preisgestaltung
+          <span className="neon-text">Flexible</span> API-Pakete
         </h2>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-          Wählen Sie den Plan, der am besten zu den Anforderungen Ihres Unternehmens passt.
+          Wählen Sie das passende Paket für Ihre Recruiting-Anforderungen und skalieren Sie nach Bedarf.
         </p>
       </div>
       
@@ -129,6 +132,23 @@ const PricingSection: React.FC = () => {
             <PricingCard {...option} />
           </div>
         ))}
+      </div>
+      
+      <div className="mt-16 text-center max-w-3xl mx-auto glass-card p-8">
+        <h3 className="text-2xl font-bold mb-4">Berechnen Sie Ihren ROI</h3>
+        <p className="text-gray-300 mb-4">
+          Mit TactFlux können Sie Ihre Recruiting-Kosten senken und gleichzeitig bessere Einstellungsentscheidungen treffen:
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+          <div className="glass-card p-4">
+            <h4 className="text-lg font-semibold mb-2 text-tactflux-blue">Zeit- und Kostenersparnis</h4>
+            <p className="text-sm text-gray-400">Reduzieren Sie die Zeit bis zur Einstellung um durchschnittlich 42% und senken Sie die Kosten pro Einstellung um bis zu 35%.</p>
+          </div>
+          <div className="glass-card p-4">
+            <h4 className="text-lg font-semibold mb-2 text-tactflux-neon">Bessere Candidate Experience</h4>
+            <p className="text-sm text-gray-400">96% der Bewerber berichten von einer positiven Erfahrung mit TactFlux, was direkt Ihre Employer Brand stärkt.</p>
+          </div>
+        </div>
       </div>
     </section>
   );
