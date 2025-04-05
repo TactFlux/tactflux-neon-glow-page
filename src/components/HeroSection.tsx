@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
@@ -30,14 +31,14 @@ const HeroSection: React.FC = () => {
               <Button 
                 onClick={() => scrollToSection('cta')}
                 variant="tactflux-static"
-                className="text-lg px-6 py-6 hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Jetzt starten <ArrowRight className="ml-2" size={18} />
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => scrollToSection('features')}
-                className="text-tactflux-blue border-tactflux-blue/20 hover:bg-tactflux-blue/10 text-lg px-6 py-6 hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="text-tactflux-blue border-tactflux-blue/20 hover:bg-tactflux-blue/10 text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Mehr erfahren
               </Button>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
@@ -69,7 +70,7 @@ const Header: React.FC = () => {
           <div className="hidden md:block">
             <Button 
               variant="tactflux-static"
-              className="shadow-lg text-white font-medium"
+              className="text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten
@@ -116,7 +117,7 @@ const Header: React.FC = () => {
             </button>
             <Button 
               variant="tactflux-static"
-              className="w-full font-medium mt-4"
+              className="w-full text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300 mt-4"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten

@@ -153,7 +153,7 @@
 
 /* Custom CTA Button Classes */
 .cta-button {
-  @apply relative w-[200px] h-[60px] rounded-[12px] border border-white/20 bg-gradient-flow shadow-[0px_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 overflow-hidden text-white font-medium flex items-center justify-center;
+  @apply relative w-[200px] h-[44px] rounded-[12px] border border-white/20 bg-gradient-flow shadow-[0px_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 overflow-hidden text-white font-medium flex items-center justify-center;
 }
 
 .cta-button:hover {
@@ -166,7 +166,7 @@
 
 /* Static CTA Button with diagonal gradient */
 .static-cta-button {
-  @apply relative w-[200px] h-[60px] rounded-[12px] border border-white/10 shadow-[0px_4px_8px_rgba(0,0,0,0.3)] transition-transform duration-300 overflow-hidden text-white font-medium flex items-center justify-center;
+  @apply relative w-[200px] h-[44px] rounded-[12px] border border-white/10 shadow-[0px_4px_8px_rgba(0,0,0,0.3)] transition-transform duration-300 overflow-hidden text-white font-medium flex items-center justify-center;
   background: linear-gradient(135deg, #FF5EF4, #00CFFD, #924BFF);
   opacity: 0.9;
 }
