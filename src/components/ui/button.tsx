@@ -21,6 +21,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         tactflux: "relative bg-gradient-flow overflow-hidden text-white border border-white/10 hover:border-white/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95",
         "tactflux-cta": "cta-button",
+        "tactflux-static": "static-cta-button",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -57,7 +57,7 @@ const AboutUsSection: React.FC = () => {
         <div className="mt-16 text-center">
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            variant="tactflux-cta"
+            variant="tactflux-static"
             size="cta"
             className="mx-auto"
           >

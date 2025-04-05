@@ -30,7 +30,7 @@ const HeroSection: React.FC = () => {
             <div className="flex flex-wrap gap-4">
               <Button 
                 onClick={() => scrollToSection('cta')}
-                variant="tactflux-cta"
+                variant="tactflux-static"
                 size="cta"
                 className="shadow-lg"
               >
