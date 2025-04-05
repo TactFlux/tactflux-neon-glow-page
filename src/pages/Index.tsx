@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
+import AboutUsSection from '../components/AboutUsSection';
 import FeaturesSection from '../components/FeaturesSection';
 import PricingSection from '../components/PricingSection';
 import ContactSection from '../components/ContactSection';
@@ -39,6 +40,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <div id="cta"></div> {/* Scroll anchor for CTA buttons */}
+        <AboutUsSection />
         <FeaturesSection />
         <PricingSection />
         <ContactSection />

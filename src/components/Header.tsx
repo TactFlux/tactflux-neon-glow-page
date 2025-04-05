@@ -41,6 +41,12 @@ const Header: React.FC = () => {
           <div className="hidden md:block">
             <nav className="flex space-x-10">
               <button 
+                onClick={() => scrollToSection('about-us')}
+                className="text-white hover:text-tactflux-blue transition-colors"
+              >
+                Über uns
+              </button>
+              <button 
                 onClick={() => scrollToSection('features')}
                 className="text-white hover:text-tactflux-blue transition-colors"
               >
@@ -85,6 +91,12 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-tactflux-card bg-opacity-95 backdrop-blur-lg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <button
+              onClick={() => scrollToSection('about-us')}
+              className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left"
+            >
+              Über uns
+            </button>
             <button
               onClick={() => scrollToSection('features')}
               className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left"

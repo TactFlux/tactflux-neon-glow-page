@@ -87,9 +87,9 @@ export default {
 					to: { height: '0' }
 				},
 				'glow': {
-					'0%': { boxShadow: '0 0 5px rgba(255, 0, 255, 0.7)' },
-					'50%': { boxShadow: '0 0 20px rgba(255, 0, 255, 0.9), 0 0 30px rgba(255, 0, 255, 0.5)' },
-					'100%': { boxShadow: '0 0 5px rgba(255, 0, 255, 0.7)' }
+					'0%': { boxShadow: '0 0 5px rgba(0, 232, 255, 0.7)' },
+					'50%': { boxShadow: '0 0 20px rgba(0, 232, 255, 0.9), 0 0 30px rgba(0, 232, 255, 0.5)' },
+					'100%': { boxShadow: '0 0 5px rgba(0, 232, 255, 0.7)' }
 				},
 				'pulse-neon': {
 					'0%, 100%': { opacity: '1' },
