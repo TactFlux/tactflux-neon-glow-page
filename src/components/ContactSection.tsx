@@ -1,27 +1,24 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { MailIcon, MessageSquare, Send } from 'lucide-react';
-
 const ContactSection: React.FC = () => {
-  const { toast } = useToast();
-  
+  const {
+    toast
+  } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // In a real implementation, you would send this data to your backend
     toast({
       title: "Nachricht gesendet",
       description: "Wir werden uns in Kürze mit Ihnen in Verbindung setzen.",
-      duration: 5000,
+      duration: 5000
     });
   };
-
-  return (
-    <section className="section-container" id="contact">
+  return <section className="section-container" id="contact">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="animate-fade-in">
@@ -38,7 +35,7 @@ const ContactSection: React.FC = () => {
                   <MailIcon size={24} className="text-tactflux-neon" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1">E-Mail</h3>
+                  <h3 className="text-lg font-medium mb-1 text-left">E-Mail</h3>
                   <p className="text-gray-400">info@tactflux.com</p>
                 </div>
               </div>
@@ -48,7 +45,7 @@ const ContactSection: React.FC = () => {
                   <MessageSquare size={24} className="text-tactflux-blue" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Live Chat</h3>
+                  <h3 className="text-lg font-medium mb-1 text-left">Live Chat</h3>
                   <p className="text-gray-400">Verfügbar werktags von 9:00 - 17:00 Uhr</p>
                 </div>
               </div>
@@ -61,62 +58,31 @@ const ContactSection: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Name</label>
-                  <Input 
-                    id="name" 
-                    name="name" 
-                    placeholder="Ihr Name" 
-                    required 
-                    className="bg-white/5 border-white/10 text-white"
-                  />
+                  <Input id="name" name="name" placeholder="Ihr Name" required className="bg-white/5 border-white/10 text-white" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">E-Mail</label>
-                  <Input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    placeholder="ihre.email@beispiel.de" 
-                    required 
-                    className="bg-white/5 border-white/10 text-white"
-                  />
+                  <Input id="email" name="email" type="email" placeholder="ihre.email@beispiel.de" required className="bg-white/5 border-white/10 text-white" />
                 </div>
               </div>
               
               <div>
                 <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">Betreff</label>
-                <Input 
-                  id="subject" 
-                  name="subject" 
-                  placeholder="Worum geht es?" 
-                  required 
-                  className="bg-white/5 border-white/10 text-white"
-                />
+                <Input id="subject" name="subject" placeholder="Worum geht es?" required className="bg-white/5 border-white/10 text-white" />
               </div>
               
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">Nachricht</label>
-                <Textarea 
-                  id="message" 
-                  name="message" 
-                  placeholder="Ihre Nachricht..." 
-                  rows={5} 
-                  required 
-                  className="bg-white/5 border-white/10 text-white"
-                />
+                <Textarea id="message" name="message" placeholder="Ihre Nachricht..." rows={5} required className="bg-white/5 border-white/10 text-white" />
               </div>
               
-              <Button 
-                type="submit" 
-                className="bg-tactflux-neon hover:bg-tactflux-neon/90 text-black neon-border w-full"
-              >
+              <Button type="submit" className="bg-tactflux-neon hover:bg-tactflux-neon/90 text-black neon-border w-full">
                 Nachricht senden <Send size={16} className="ml-2" />
               </Button>
             </form>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactSection;
