@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
@@ -31,8 +30,7 @@ const HeroSection: React.FC = () => {
               <Button 
                 onClick={() => scrollToSection('cta')}
                 variant="tactflux-static"
-                size="cta"
-                className="shadow-lg"
+                className="text-lg px-6 py-6 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Jetzt starten <ArrowRight className="ml-2" size={18} />
               </Button>
