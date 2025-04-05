@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
@@ -68,7 +69,7 @@ const Header: React.FC = () => {
           
           <div className="hidden md:block">
             <Button 
-              variant="tactflux-static"
+              variant="tactflux"
               className="shadow-lg text-white font-medium"
               onClick={() => scrollToSection('cta')}
             >
@@ -115,7 +116,7 @@ const Header: React.FC = () => {
               Kontakt
             </button>
             <Button 
-              variant="tactflux-static"
+              variant="tactflux"
               className="w-full font-medium mt-4"
               onClick={() => scrollToSection('cta')}
             >
