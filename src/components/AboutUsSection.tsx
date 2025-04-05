@@ -12,43 +12,43 @@ const AboutUsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Über <span className="text-tactflux-blue">Uns</span>
+            Über <span className="text-tactflux-blue">TactFlux</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Wir revolutionieren die Art und Weise, wie Unternehmen kreative Talente entdecken und bewerten.
+            Wir geben Bewerbern eine faire Chance, ihr volles Potenzial zu zeigen – unabhängig von Lebenslauf oder formalen Qualifikationen.
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="glass-card p-8 animate-fade-in">
-            <h3 className="text-2xl font-bold mb-4 text-tactflux-blue">Unsere Vision</h3>
+            <h3 className="text-2xl font-bold mb-4 text-tactflux-blue">Unsere Mission</h3>
             <p className="text-gray-300 mb-6">
-              Wir glauben daran, dass kreatives Denken und Problemlösungsfähigkeiten entscheidende Faktoren für den Erfolg in der heutigen dynamischen Arbeitswelt sind. Unsere Mission ist es, Unternehmen dabei zu helfen, diese Fähigkeiten objektiv zu bewerten und die besten Talente zu finden.
+              In einer Welt, in der Lebensläufe oft über Karrieren entscheiden, haben wir TactFlux entwickelt, um Bewerbern eine neue Art der Selbstdarstellung zu ermöglichen. Wir glauben an die verborgenen Talente, die in traditionellen Bewerbungsprozessen oft übersehen werden.
             </p>
             <p className="text-gray-300">
-              Mit unserem innovativen Bewerberbewertungssystem bieten wir eine umfassende Lösung, die über traditionelle Auswahlverfahren hinausgeht und tiefere Einblicke in die kreativen Fähigkeiten von Kandidaten ermöglicht.
+              Mit einer Kombination aus spielerischen Erlebnissen und objektiver Talentbewertung schaffen wir eine Bühne, auf der jeder Bewerber seine kreativen Problemlösungsfähigkeiten, Anpassungsfähigkeit und sozialen Kompetenzen authentisch zeigen kann.
             </p>
           </div>
           
           <div className="space-y-6">
             <div className="glass-card p-6 animate-scale-in">
-              <h4 className="text-xl font-bold mb-2 text-tactflux-purple">Gegründet 2023</h4>
+              <h4 className="text-xl font-bold mb-2 text-tactflux-purple">Für Bewerber gemacht</h4>
               <p className="text-gray-400">
-                Aus der Idee geboren, den Rekrutierungsprozess zu revolutionieren und kreative Köpfe zu fördern.
+                TactFlux gibt dir die Chance, jenseits klassischer Kriterien zu überzeugen und deine einzigartigen Talente zu demonstrieren.
               </p>
             </div>
             
             <div className="glass-card p-6 animate-scale-in" style={{ animationDelay: "0.2s" }}>
-              <h4 className="text-xl font-bold mb-2 text-tactflux-neon">Team von Experten</h4>
+              <h4 className="text-xl font-bold mb-2 text-tactflux-neon">Spielerische Erfahrung</h4>
               <p className="text-gray-400">
-                Unser Team besteht aus Fachleuten aus den Bereichen Personalwesen, Psychologie und Technologie.
+                Statt trockener Fragebögen bieten wir interaktive Herausforderungen, die deine kreative Problemlösungsfähigkeit auf die Probe stellen.
               </p>
             </div>
             
             <div className="glass-card p-6 animate-scale-in" style={{ animationDelay: "0.4s" }}>
-              <h4 className="text-xl font-bold mb-2 text-tactflux-blue">Kontinuierliche Innovation</h4>
+              <h4 className="text-xl font-bold mb-2 text-tactflux-blue">Sofortiges Feedback</h4>
               <p className="text-gray-400">
-                Wir entwickeln unsere Plattform ständig weiter, um auf dem neuesten Stand der Technologie und Forschung zu bleiben.
+                Nach jedem Test erhältst du eine persönliche Auswertung mit Stärken und Entwicklungspotentialen – ein Mehrwert für deine Karriere.
               </p>
             </div>
           </div>
@@ -61,7 +61,7 @@ const AboutUsSection: React.FC = () => {
             size="cta"
             className="mx-auto"
           >
-            Kontaktieren Sie uns
+            Starte deine Reise
           </Button>
         </div>
       </div>

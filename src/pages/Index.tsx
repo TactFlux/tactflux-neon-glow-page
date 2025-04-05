@@ -12,23 +12,23 @@ import Footer from '../components/Footer';
 const Index = () => {
   // Add SEO meta tags dynamically
   useEffect(() => {
-    document.title = "TactFlux - Kreativität neu definiert";
+    document.title = "TactFlux - Deine Talente. Deine Bühne.";
     
     // Add meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'TactFlux - Das kreative Bewerberbewertungssystem für Unternehmen, die das Beste suchen. Kreativitätstests, Benutzeranalysen und mehr.');
+      metaDescription.setAttribute('content', 'TactFlux revolutioniert Bewerbungsprozesse mit spielerischen Tests, die deine kreative Problemlösung und Anpassungsfähigkeit zeigen – unabhängig von Lebenslauf und Zeugnissen.');
     }
 
     // Add Open Graph meta tags for better social sharing
     const ogTitleMeta = document.querySelector('meta[property="og:title"]');
     if (ogTitleMeta) {
-      ogTitleMeta.setAttribute('content', 'TactFlux - Kreativität neu definiert');
+      ogTitleMeta.setAttribute('content', 'TactFlux - Deine Talente. Deine Bühne.');
     }
 
     const ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
     if (ogDescriptionMeta) {
-      ogDescriptionMeta.setAttribute('content', 'Das kreative Bewerberbewertungssystem für Unternehmen, die das Beste suchen.');
+      ogDescriptionMeta.setAttribute('content', 'Zeige, was in dir steckt – jenseits von Lebenslauf und Zeugnissen. Die innovative Bewerbungsplattform für deine Zukunft.');
     }
   }, []);
 
