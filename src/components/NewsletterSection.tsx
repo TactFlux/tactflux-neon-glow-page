@@ -20,13 +20,13 @@ const NewsletterSection: React.FC = () => {
 
   return (
     <section className="py-16 relative overflow-hidden" id="newsletter">
-      <div className="absolute inset-0 bg-gradient-to-r from-tactflux-neon/10 to-tactflux-blue/10 opacity-30"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-tactflux-blue/10 to-tactflux-blue/10 opacity-30"></div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="card-glow p-8 animate-fade-in">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-3">
-              Bleiben Sie <span className="neon-text">informiert</span>
+              Bleiben Sie <span className="text-tactflux-blue">informiert</span>
             </h2>
             <p className="text-gray-300">
               Abonnieren Sie unseren Newsletter für die neuesten Updates, Tipps und Einblicke in die Welt der kreativen Bewerberbewertung.

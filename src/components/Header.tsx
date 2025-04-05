@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
@@ -41,19 +42,19 @@ const Header: React.FC = () => {
             <nav className="flex space-x-10">
               <button 
                 onClick={() => scrollToSection('features')}
-                className="text-white hover:text-tactflux-neon transition-colors"
+                className="text-white hover:text-tactflux-blue transition-colors"
               >
                 Überblick
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')}
-                className="text-white hover:text-tactflux-neon transition-colors"
+                className="text-white hover:text-tactflux-blue transition-colors"
               >
                 Abo-Preise
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
-                className="text-white hover:text-tactflux-neon transition-colors"
+                className="text-white hover:text-tactflux-blue transition-colors"
               >
                 Kontakt
               </button>
@@ -63,7 +64,7 @@ const Header: React.FC = () => {
           <div className="hidden md:block">
             <Button 
               variant="default"
-              className="bg-tactflux-neon hover:bg-tactflux-neon/90 text-black font-medium neon-border animate-pulse-neon"
+              className="bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium blue-neon-border animate-pulse-neon"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten
@@ -73,7 +74,7 @@ const Header: React.FC = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-tactflux-neon"
+              className="text-white hover:text-tactflux-blue"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -86,25 +87,25 @@ const Header: React.FC = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <button
               onClick={() => scrollToSection('features')}
-              className="block px-3 py-2 text-white hover:text-tactflux-neon w-full text-left"
+              className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left"
             >
               Überblick
             </button>
             <button
               onClick={() => scrollToSection('pricing')}
-              className="block px-3 py-2 text-white hover:text-tactflux-neon w-full text-left"
+              className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left"
             >
               Abo-Preise
             </button>
             <button
               onClick={() => scrollToSection('contact')}
-              className="block px-3 py-2 text-white hover:text-tactflux-neon w-full text-left"
+              className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left"
             >
               Kontakt
             </button>
             <Button 
               variant="default"
-              className="w-full bg-tactflux-neon hover:bg-tactflux-neon/90 text-black font-medium neon-border mt-4"
+              className="w-full bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium blue-neon-border mt-4"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten
