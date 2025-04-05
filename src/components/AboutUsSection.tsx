@@ -57,7 +57,8 @@ const AboutUsSection: React.FC = () => {
         <div className="mt-16 text-center">
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium blue-neon-border"
+            variant="tactflux"
+            className="text-white font-medium"
           >
             Kontaktieren Sie uns
           </Button>

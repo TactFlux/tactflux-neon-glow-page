@@ -69,8 +69,8 @@ const Header: React.FC = () => {
           
           <div className="hidden md:block">
             <Button 
-              variant="default"
-              className="bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium blue-neon-border animate-pulse-neon"
+              variant="tactflux"
+              className="shadow-lg text-white font-medium"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten
@@ -116,8 +116,8 @@ const Header: React.FC = () => {
               Kontakt
             </button>
             <Button 
-              variant="default"
-              className="w-full bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium blue-neon-border mt-4"
+              variant="tactflux"
+              className="w-full font-medium mt-4"
               onClick={() => scrollToSection('cta')}
             >
               Jetzt starten

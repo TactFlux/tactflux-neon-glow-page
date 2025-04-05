@@ -71,6 +71,25 @@
     padding: 1px;
     border-radius: inherit;
   }
+
+  /* Custom button gradient animation */
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .bg-gradient-loader {
+    background: linear-gradient(90deg, #ff00ff, #8b5cf6, #00e8ff, #ff00ff);
+    background-size: 300% 100%;
+    animation: gradient-shift 8s ease infinite;
+  }
 }
 
 @layer utilities {
