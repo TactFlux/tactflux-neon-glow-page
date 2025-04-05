@@ -72,7 +72,35 @@
     border-radius: inherit;
   }
 
-  /* Custom button gradient animation */
+  /* Advanced flowing gradient animation */
+  @keyframes flow-gradient {
+    0% {
+      background-position: 0% 50%;
+      opacity: 1;
+    }
+    45% {
+      opacity: 1;
+    }
+    50% {
+      background-position: 100% 50%;
+      opacity: 0.85;
+    }
+    55% {
+      opacity: 1;
+    }
+    100% {
+      background-position: 200% 50%;
+      opacity: 1;
+    }
+  }
+
+  .bg-gradient-flow {
+    background: linear-gradient(90deg, #ff00ff, #8b5cf6, #00e8ff, #ff00ff);
+    background-size: 200% 100%;
+    animation: flow-gradient 8s linear infinite;
+  }
+
+  /* Keeping the older gradient animation for backwards compatibility */
   @keyframes gradient-shift {
     0% {
       background-position: 0% 50%;
