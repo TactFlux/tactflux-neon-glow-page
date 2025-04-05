@@ -72,32 +72,31 @@
     border-radius: inherit;
   }
 
-  /* Advanced flowing gradient animation with slower speed and better opacity transition */
-  @keyframes flow-gradient {
-    0% {
+  /* Wave gradient animation - single directional flow */
+  @keyframes gradient-wave {
+    0% { 
       background-position: 0% 50%;
       opacity: 1;
     }
-    42% {
+    40% {
       opacity: 1;
     }
     50% {
-      background-position: 100% 50%;
-      opacity: 0.85;
+      opacity: 0.8;
     }
-    58% {
+    60% {
       opacity: 1;
     }
-    100% {
-      background-position: 200% 50%;
+    100% { 
+      background-position: 100% 50%;
       opacity: 1;
     }
   }
 
   .bg-gradient-flow {
-    background: linear-gradient(90deg, #ff00ff, #8b5cf6, #00e8ff, #ff00ff);
+    background: linear-gradient(90deg, #FF5EF4, #00CFFD, #924BFF);
     background-size: 200% 100%;
-    animation: flow-gradient 10s linear infinite;
+    animation: gradient-wave 5s linear infinite;
   }
 
   /* Keeping the older gradient animation for backwards compatibility */
@@ -150,4 +149,17 @@
 
 .section-container {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+}
+
+/* Custom CTA Button Classes */
+.cta-button {
+  @apply relative w-[200px] h-[60px] rounded-[12px] border border-white/20 bg-gradient-flow shadow-[0px_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 overflow-hidden text-white font-medium flex items-center justify-center;
+}
+
+.cta-button:hover {
+  @apply transform scale-105 border-white/40;
+}
+
+.cta-button:active {
+  @apply transform scale-95 transition-transform duration-100;
 }

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 
@@ -56,8 +57,9 @@ const AboutUsSection: React.FC = () => {
         <div className="mt-16 text-center">
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            variant="tactflux"
-            className="text-white font-medium"
+            variant="tactflux-cta"
+            size="cta"
+            className="mx-auto"
           >
             Kontaktieren Sie uns
           </Button>
