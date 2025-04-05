@@ -72,20 +72,20 @@
     border-radius: inherit;
   }
 
-  /* Advanced flowing gradient animation */
+  /* Advanced flowing gradient animation with slower speed and better opacity transition */
   @keyframes flow-gradient {
     0% {
       background-position: 0% 50%;
       opacity: 1;
     }
-    45% {
+    42% {
       opacity: 1;
     }
     50% {
       background-position: 100% 50%;
       opacity: 0.85;
     }
-    55% {
+    58% {
       opacity: 1;
     }
     100% {
@@ -97,7 +97,7 @@
   .bg-gradient-flow {
     background: linear-gradient(90deg, #ff00ff, #8b5cf6, #00e8ff, #ff00ff);
     background-size: 200% 100%;
-    animation: flow-gradient 8s linear infinite;
+    animation: flow-gradient 10s linear infinite;
   }
 
   /* Keeping the older gradient animation for backwards compatibility */
