@@ -1,22 +1,20 @@
-
 import React from 'react';
 import Logo from './Logo';
-
 const Footer: React.FC = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
-
-  return (
-    <footer className="bg-black bg-opacity-50 pt-16 pb-8">
+  return <footer className="bg-black bg-opacity-50 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <Logo />
-            <p className="mt-4 text-gray-400 text-sm">
+            <p className="mt-4 text-gray-400 text-sm text-left">
               Das innovative Bewerberbewertungssystem für kreative Problemlösungsfähigkeiten.
             </p>
           </div>
@@ -130,8 +128,6 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
