@@ -30,14 +30,14 @@ const HeroSection: React.FC = () => {
             <div className="flex flex-wrap gap-4">
               <Button 
                 onClick={() => scrollToSection('cta')}
-                className="bg-tactflux-neon hover:bg-tactflux-neon/90 text-black font-medium text-lg px-6 py-6 neon-border animate-glow"
+                className="bg-tactflux-blue hover:bg-tactflux-blue/90 text-black font-medium text-lg px-6 py-6 neon-border animate-glow"
               >
                 Jetzt starten <ArrowRight className="ml-2" size={18} />
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => scrollToSection('features')}
-                className="text-white border-white/20 hover:bg-white/10 text-lg px-6 py-6"
+                className="text-tactflux-blue border-tactflux-blue/20 hover:bg-tactflux-blue/10 text-lg px-6 py-6"
               >
                 Mehr erfahren
               </Button>

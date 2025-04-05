@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import TactFluxLogo from './TactFluxLogo';
+import Logo from './Logo';
 import { Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -35,7 +34,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <TactFluxLogo />
+            <Logo />
           </div>
           
           <div className="hidden md:block">
@@ -82,7 +81,6 @@ const Header: React.FC = () => {
         </div>
       </div>
       
-      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-tactflux-card bg-opacity-95 backdrop-blur-lg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
