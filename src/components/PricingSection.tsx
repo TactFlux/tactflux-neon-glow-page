@@ -1,7 +1,6 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Check, Code, Shield, Zap, Clock } from 'lucide-react';
+import { Check, Code, Shield, Zap, Clock, Users } from 'lucide-react';
 
 interface PricingCardProps {
   title: string;
@@ -158,7 +157,6 @@ const PricingSection: React.FC = () => {
 
   return (
     <section className="section-container bg-gradient-to-b from-tactflux-dark to-black relative" id="pricing" ref={sectionRef}>
-      {/* Background effects */}
       <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-tactflux-blue/5 to-transparent"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-tactflux-purple/5 blur-3xl rounded-full"></div>
       
