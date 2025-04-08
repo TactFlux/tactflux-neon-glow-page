@@ -1,7 +1,6 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Check, Code, Shield, Zap, Clock } from 'lucide-react';
+import { Check, Code, Shield, Zap, Clock, Users } from 'lucide-react';
 
 interface PricingCardProps {
   title: string;
