@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -13,7 +14,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Explicitly define AppRole to include superadmin
+// Explizit "superadmin" in die AppRole aufnehmen
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
