@@ -3,7 +3,7 @@ import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { LockIcon, InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 
 type FeatureGateProps = {
   feature: string;
@@ -18,7 +18,7 @@ const FeatureGate: React.FC<FeatureGateProps> = ({
   fallback,
   hideAlert = false 
 }) => {
-  const { canAccessFeature, companyInfo } = useAuth();
+  const { canAccessFeature, companyInfo, userRole } = useAuth();
   const hasAccess = canAccessFeature(feature);
   
   if (hasAccess) {
@@ -33,6 +33,7 @@ const FeatureGate: React.FC<FeatureGateProps> = ({
     return null;
   }
   
+  // Display which plan is needed for this feature
   const planInfo: Record<string, { name: string, color: string }> = {
     'export-csv': { name: 'Pro', color: 'bg-blue-500' },
     'export-pdf': { name: 'Pro', color: 'bg-blue-500' },
@@ -54,6 +55,9 @@ const FeatureGate: React.FC<FeatureGateProps> = ({
       <AlertDescription className="text-sm text-gray-300 mt-2">
         Diese Funktion ist nur mit dem {planDetail.name}-Plan verfügbar.
         {companyInfo?.plan && <span> Ihr aktueller Plan: <Badge>{companyInfo.plan}</Badge></span>}
+        {userRole?.role !== 'admin' && (
+          <p className="mt-1">Kontaktieren Sie Ihren Administrator für Zugang oder ein Upgrade.</p>
+        )}
       </AlertDescription>
     </Alert>
   );

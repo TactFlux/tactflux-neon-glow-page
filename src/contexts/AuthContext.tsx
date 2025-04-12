@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -160,7 +161,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const canAccessFeature = (featureName: string): boolean => {
-    if (isSuperAdmin) return true;
+    // Superadmins and regular admins always have full access
+    if (isSuperAdmin || userRole?.role === "admin") return true;
     
     if (!companyInfo) return false;
     
