@@ -1,10 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import Logo from './Logo';
 import { Menu, X } from 'lucide-react';
+
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -13,6 +17,7 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -22,6 +27,7 @@ const Header: React.FC = () => {
     }
     setIsMenuOpen(false);
   };
+
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-tactflux-dark bg-opacity-90 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -46,9 +52,15 @@ const Header: React.FC = () => {
             </nav>
           </div>
           
-          <div className="hidden md:block">
-            <Button variant="tactflux" onClick={() => scrollToSection('cta')} className="shadow-lg text-white font-medium rounded-2xl">
-              Jetzt starten
+          <div className="hidden md:flex items-center space-x-4">
+            <Button 
+              asChild
+              variant="tactflux" 
+              className="shadow-lg text-white font-medium rounded-2xl"
+            >
+              <Link to="/signup">
+                Kostenlosen Account erstellen
+              </Link>
             </Button>
           </div>
           
@@ -74,11 +86,20 @@ const Header: React.FC = () => {
             <button onClick={() => scrollToSection('contact')} className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left">
               Kontakt
             </button>
-            <Button variant="tactflux" className="w-full font-medium mt-4" onClick={() => scrollToSection('cta')}>
-              Jetzt starten
-            </Button>
+            <div className="mt-4">
+              <Button 
+                asChild
+                variant="tactflux-cta" 
+                className="w-full font-medium"
+              >
+                <Link to="/signup">
+                  Jetzt kostenlos starten
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>}
     </header>;
 };
+
 export default Header;

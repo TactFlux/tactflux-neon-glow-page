@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -87,13 +88,16 @@ const AboutUsSection: React.FC = () => {
         
         <div className="mt-16 text-center">
           <Button 
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            variant="tactflux-static"
+            asChild
+            variant="tactflux-cta" 
             size="cta"
-            className="mx-auto py-2"
+            className="mx-auto py-2 ring-tactflux-blue ring-offset-2 focus:ring-2"
           >
-            API-Demo anfordern
+            <Link to="/signup">
+              Jetzt mit TactFlux starten
+            </Link>
           </Button>
+          <p className="text-gray-300 mt-3">Kostenlos registrieren und sofort loslegen</p>
         </div>
       </div>
     </section>

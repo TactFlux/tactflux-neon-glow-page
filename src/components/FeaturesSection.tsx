@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 import { Fingerprint, LineChart, BarChart3, Shield, Award, Sparkles, Code, BarChart, Cpu, Zap } from 'lucide-react';
 
 interface FeatureCardProps {
@@ -136,6 +138,23 @@ const FeaturesSection: React.FC = () => {
             <h4 className="text-lg font-semibold mb-2">Datengestützte Entscheidungen</h4>
             <p className="text-gray-400">Die Testergebnisse fließen automatisch zurück in Ihr HR-Tool – mit klaren Scores und aussagekräftigen Analysen.</p>
           </div>
+        </div>
+        
+        {/* CTA Button */}
+        <div className="mt-12 text-center">
+          <Button 
+            asChild
+            variant="tactflux-cta" 
+            size="cta" 
+            className="mx-auto shadow-neon-blue-hover ring-tactflux-blue ring-offset-2 focus:ring-2 transform transition-all hover:scale-105"
+          >
+            <Link to="/signup">
+              Kostenlosen TactFlux-Account erstellen
+            </Link>
+          </Button>
+          <p className="text-gray-400 mt-4">
+            Sofort starten, keine Kreditkarte erforderlich
+          </p>
         </div>
       </div>
     </section>
