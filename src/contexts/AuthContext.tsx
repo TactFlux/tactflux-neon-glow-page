@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -76,8 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userRoleValue = userRole?.role as string;
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        // Need to use as AppRole since our AppRole type includes "superadmin"
-        setUserRole({ role: "superadmin" as AppRole });
+        // Now that AppRole includes "superadmin", we can assign it directly
+        setUserRole({ role: "superadmin" });
         
         // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
