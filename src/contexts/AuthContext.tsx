@@ -14,10 +14,13 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Update the role type to include "superadmin"
-// Make sure the role is defined as a union type that includes all possible values
+// Define a custom role type that extends the database enum
+// This allows us to add "superadmin" which is handled in application logic
+// but might not be defined in the database enum
+type AppRole = "user" | "admin" | "member" | "superadmin";
+
 type UserRole = {
-  role: "user" | "admin" | "member" | "superadmin";
+  role: AppRole;
 };
 
 type AuthContextType = {
@@ -69,10 +72,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Check if user is superadmin
-      // Use type assertion to tell TypeScript that the role can be "superadmin"
+      // Using a string comparison instead of type checking
+      // This works because role is just a string in the database
       if (userRole?.role === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: "superadmin" });
+        // Cast to AppRole type since we know it's valid in our application
+        setUserRole({ role: "superadmin" as AppRole });
         
         // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
@@ -98,9 +103,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Set user role
-      // Use type assertion to tell TypeScript that the role is of valid type
-      setUserRole({ role: userRole.role as UserRole['role'] });
+      // Set user role - cast the database role to our AppRole type
+      setUserRole({ role: userRole.role as AppRole });
 
       // Hole die Firmendaten
       const { data: company, error: companyError } = await supabase
