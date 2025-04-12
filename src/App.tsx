@@ -1,23 +1,14 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-
-// Create a component to handle external redirects properly
-const ExternalRedirect = ({ to }: { to: string }) => {
-  // Use useEffect to handle the redirection after component mount
-  React.useEffect(() => {
-    window.location.href = to;
-  }, [to]);
-  
-  // Return loading state or null while redirecting
-  return <div className="min-h-screen flex items-center justify-center">Redirecting...</div>;
-};
+import Signup from "./pages/Signup";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -29,8 +20,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* External redirect to your own domain */}
-          <Route path="/signup" element={<ExternalRedirect to="https://tactflux.com" />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
