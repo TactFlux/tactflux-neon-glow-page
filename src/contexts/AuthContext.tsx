@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -13,8 +14,9 @@ type CompanyInfo = {
   website?: string | null;
 };
 
+// Update the role type to include "superadmin"
 type UserRole = {
-  role: string;
+  role: "user" | "admin" | "member" | "superadmin";
 };
 
 type AuthContextType = {
