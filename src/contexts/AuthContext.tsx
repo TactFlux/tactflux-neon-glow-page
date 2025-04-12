@@ -11,9 +11,9 @@ type CompanyInfo = {
   size: string;
   email: string;
   website?: string | null;
+  plan: string;
 };
 
-// Updated AppRole type to explicitly include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
@@ -30,6 +30,7 @@ type AuthContextType = {
   checkAdminStatus: (userId: string) => Promise<boolean>;
   logout: () => Promise<void>;
   isSuperAdmin: boolean;
+  canAccessFeature: (featureName: string) => boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -42,6 +43,7 @@ const AuthContext = createContext<AuthContextType>({
   checkAdminStatus: async () => false,
   logout: async () => {},
   isSuperAdmin: false,
+  canAccessFeature: () => false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -67,8 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Safely cast role to AppRole, ensuring "superadmin" is included
-      const roleValue: AppRole = userRole?.role as AppRole;
+      const roleValue = userRole?.role as AppRole;
       
       if (roleValue === "superadmin") {
         setIsSuperAdmin(true);
@@ -158,6 +159,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const canAccessFeature = (featureName: string): boolean => {
+    if (isSuperAdmin) return true;
+    
+    if (!companyInfo) return false;
+    
+    const plan = companyInfo.plan || 'free';
+    
+    const featureAccess: Record<string, string[]> = {
+      'dashboard': ['free', 'pro', 'enterprise'],
+      'export-csv': ['pro', 'enterprise'],
+      'export-pdf': ['pro', 'enterprise'],
+      'advanced-stats': ['pro', 'enterprise'],
+      'api-access': ['enterprise'],
+      'api-keys': ['enterprise'],
+      'custom-reports': ['enterprise'],
+    };
+    
+    return featureAccess[featureName]?.includes(plan) || false;
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -199,7 +220,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       refreshCompanyInfo, 
       checkAdminStatus,
       logout,
-      isSuperAdmin
+      isSuperAdmin,
+      canAccessFeature
     }}>
       {children}
     </AuthContext.Provider>

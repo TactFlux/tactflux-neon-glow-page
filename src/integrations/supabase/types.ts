@@ -43,6 +43,7 @@ export type Database = {
           id: string
           industry: string
           name: string
+          plan: string
           size: Database["public"]["Enums"]["company_size"]
           updated_at: string | null
           website: string | null
@@ -53,6 +54,7 @@ export type Database = {
           id?: string
           industry: string
           name: string
+          plan?: string
           size: Database["public"]["Enums"]["company_size"]
           updated_at?: string | null
           website?: string | null
@@ -63,6 +65,7 @@ export type Database = {
           id?: string
           industry?: string
           name?: string
+          plan?: string
           size?: Database["public"]["Enums"]["company_size"]
           updated_at?: string | null
           website?: string | null
@@ -177,7 +180,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user" | "member"
+      app_role: "admin" | "user" | "member" | "superadmin"
       company_size: "1-10" | "11-50" | "51-200" | "200+"
     }
     CompositeTypes: {
@@ -294,7 +297,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user", "member"],
+      app_role: ["admin", "user", "member", "superadmin"],
       company_size: ["1-10", "11-50", "51-200", "200+"],
     },
   },
