@@ -258,7 +258,7 @@ const AdminSetup = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-700 border border-tactflux-border text-white"
+                className="bg-tactflux-input border-tactflux-border text-white"
               />
             </div>
             <div className="space-y-2">
@@ -270,7 +270,7 @@ const AdminSetup = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-gray-700 border border-tactflux-border text-white"
+                className="bg-tactflux-input border-tactflux-border text-white"
               />
               <p className="text-xs text-gray-400">
                 Dieses Passwort wird für den Admin-Account verwendet.
@@ -284,7 +284,7 @@ const AdminSetup = () => {
                 id="company"
                 value={selectedCompany || ""}
                 onChange={(e) => setSelectedCompany(e.target.value)}
-                className="w-full p-2 rounded-md bg-gray-700 border border-tactflux-border text-white"
+                className="w-full p-2 rounded-md bg-tactflux-input border-tactflux-border text-white"
               >
                 {companies.length > 0 ? (
                   companies.map((company) => (
@@ -328,7 +328,7 @@ const AdminSetup = () => {
                 type="email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
-                className="bg-gray-700 border border-tactflux-border text-white"
+                className="bg-tactflux-input border-tactflux-border text-white"
               />
             </div>
             <div className="space-y-2">
@@ -338,7 +338,7 @@ const AdminSetup = () => {
                 type="password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                className="bg-gray-700 border border-tactflux-border text-white"
+                className="bg-tactflux-input border-tactflux-border text-white"
               />
             </div>
           </div>

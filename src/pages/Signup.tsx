@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -219,7 +218,7 @@ const Signup = () => {
                     <FormLabel className="text-white">Unternehmensgröße</FormLabel>
                     <FormControl>
                       <select
-                        className="flex h-10 w-full rounded-md border border-tactflux-border bg-tactflux-input text-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tactflux-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-10 w-full rounded-md border border-tactflux-border bg-tactflux-input text-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tactflux-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         {...field}
                       >
                         <option value="1-10">1-10 Mitarbeiter</option>
