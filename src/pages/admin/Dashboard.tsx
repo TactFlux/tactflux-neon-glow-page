@@ -120,7 +120,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-20">
           <div className="text-center">
@@ -133,15 +133,15 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-3xl font-bold mb-2 text-foreground">
               {companyInfo ? `Willkommen, ${companyInfo.name}` : 'Admin Dashboard'}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Hier finden Sie eine Übersicht aller Aktivitäten und Ressourcen Ihrer Organisation.
             </p>
           </div>
@@ -149,40 +149,40 @@ const AdminDashboard = () => {
           {/* Dashboard Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
             {/* Statistik-Karten */}
-            <Card>
+            <Card className="bg-card text-foreground border border-border">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Tests</CardTitle>
                 <Users className="h-4 w-4 text-tactflux-blue" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{loadingData ? <Skeleton className="h-8 w-16" /> : stats.totalTests}</div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {loadingData ? <Skeleton className="h-4 w-24" /> : `${stats.completedTests} abgeschlossen`}
                 </p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="bg-card text-foreground border border-border">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Berichte</CardTitle>
                 <Clock className="h-4 w-4 text-tactflux-blue" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{loadingData ? <Skeleton className="h-8 w-16" /> : stats.sentReports}</div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {loadingData ? <Skeleton className="h-4 w-24" /> : `${recipients.length} Empfänger`}
                 </p>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="bg-card text-foreground border border-border">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">API-Keys</CardTitle>
                 <Key className="h-4 w-4 text-tactflux-blue" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{loadingData ? <Skeleton className="h-8 w-16" /> : apiKeys.length}</div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {loadingData ? <Skeleton className="h-4 w-24" /> : `Aktive API-Schlüssel`}
                 </p>
               </CardContent>
@@ -190,10 +190,10 @@ const AdminDashboard = () => {
           </div>
 
           {/* API Keys Tabelle */}
-          <Card className="mb-8">
+          <Card className="mb-8 bg-card text-foreground border border-border">
             <CardHeader>
               <CardTitle>API-Schlüssel</CardTitle>
-              <CardDescription>Verwalten Sie Ihre API-Schlüssel für den Zugriff auf die TactFlux API.</CardDescription>
+              <CardDescription className="text-muted-foreground">Verwalten Sie Ihre API-Schlüssel für den Zugriff auf die TactFlux API.</CardDescription>
             </CardHeader>
             <CardContent>
               {loadingData ? (
@@ -206,10 +206,10 @@ const AdminDashboard = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Beschreibung</TableHead>
-                      <TableHead>Erstellt am</TableHead>
-                      <TableHead>Zuletzt verwendet</TableHead>
-                      <TableHead>Schlüssel (teilweise)</TableHead>
+                      <TableHead className="text-foreground">Beschreibung</TableHead>
+                      <TableHead className="text-foreground">Erstellt am</TableHead>
+                      <TableHead className="text-foreground">Zuletzt verwendet</TableHead>
+                      <TableHead className="text-foreground">Schlüssel (teilweise)</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -222,12 +222,12 @@ const AdminDashboard = () => {
                     ) : (
                       apiKeys.map((key) => (
                         <TableRow key={key.id}>
-                          <TableCell>{key.description || 'Kein Titel'}</TableCell>
-                          <TableCell>{new Date(key.created_at).toLocaleDateString('de-DE')}</TableCell>
-                          <TableCell>
+                          <TableCell className="text-foreground">{key.description || 'Kein Titel'}</TableCell>
+                          <TableCell className="text-foreground">{new Date(key.created_at).toLocaleDateString('de-DE')}</TableCell>
+                          <TableCell className="text-foreground">
                             {key.last_used_at ? new Date(key.last_used_at).toLocaleDateString('de-DE') : 'Noch nicht verwendet'}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="text-foreground">
                             {key.api_key.substring(0, 8)}...
                           </TableCell>
                         </TableRow>
@@ -238,15 +238,17 @@ const AdminDashboard = () => {
               )}
             </CardContent>
             <CardFooter>
-              <Button variant="outline">Neuen API-Schlüssel erstellen</Button>
+              <Button variant="outline" className="border-border text-foreground hover:bg-secondary">
+                Neuen API-Schlüssel erstellen
+              </Button>
             </CardFooter>
           </Card>
 
           {/* Report-Empfänger Tabelle */}
-          <Card>
+          <Card className="bg-card text-foreground border border-border">
             <CardHeader>
               <CardTitle>Report-Empfänger</CardTitle>
-              <CardDescription>Personen, die Berichte von TactFlux erhalten.</CardDescription>
+              <CardDescription className="text-muted-foreground">Personen, die Berichte von TactFlux erhalten.</CardDescription>
             </CardHeader>
             <CardContent>
               {loadingData ? (
@@ -259,9 +261,9 @@ const AdminDashboard = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>E-Mail</TableHead>
-                      <TableHead>Firma</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead className="text-foreground">E-Mail</TableHead>
+                      <TableHead className="text-foreground">Firma</TableHead>
+                      <TableHead className="text-foreground">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -274,9 +276,9 @@ const AdminDashboard = () => {
                     ) : (
                       recipients.map((recipient) => (
                         <TableRow key={recipient.id}>
-                          <TableCell>{recipient.email}</TableCell>
-                          <TableCell>{recipient.company_name || 'Nicht angegeben'}</TableCell>
-                          <TableCell>
+                          <TableCell className="text-foreground">{recipient.email}</TableCell>
+                          <TableCell className="text-foreground">{recipient.company_name || 'Nicht angegeben'}</TableCell>
+                          <TableCell className="text-foreground">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${recipient.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                               {recipient.active ? 'Aktiv' : 'Inaktiv'}
                             </span>
@@ -289,7 +291,9 @@ const AdminDashboard = () => {
               )}
             </CardContent>
             <CardFooter>
-              <Button variant="outline">Empfänger hinzufügen</Button>
+              <Button variant="outline" className="border-border text-foreground hover:bg-secondary">
+                Empfänger hinzufügen
+              </Button>
             </CardFooter>
           </Card>
         </div>
