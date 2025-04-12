@@ -29,8 +29,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* External redirect to a known valid domain for testing */}
-          <Route path="/signup" element={<ExternalRedirect to="https://google.com" />} />
+          {/* External redirect to your own domain */}
+          <Route path="/signup" element={<ExternalRedirect to="https://tactflux.com" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
