@@ -36,6 +36,39 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          industry: string
+          name: string
+          size: Database["public"]["Enums"]["company_size"]
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          industry: string
+          name: string
+          size: Database["public"]["Enums"]["company_size"]
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          industry?: string
+          name?: string
+          size?: Database["public"]["Enums"]["company_size"]
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       report_delivery_logs: {
         Row: {
           completed_tests_count: number
@@ -93,6 +126,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -112,7 +177,8 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user" | "member"
+      company_size: "1-10" | "11-50" | "51-200" | "200+"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -227,6 +293,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user", "member"],
+      company_size: ["1-10", "11-50", "51-200", "200+"],
+    },
   },
 } as const

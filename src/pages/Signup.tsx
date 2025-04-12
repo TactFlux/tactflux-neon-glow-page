@@ -5,13 +5,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, User, Mail, Building, Globe, Briefcase, Users } from "lucide-react";
+import { Eye, EyeOff, Building, Globe, Briefcase, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/components/Logo";
+import { supabase } from "@/integrations/supabase/client";
 
 // Form schema für Validierung
 const formSchema = z.object({
@@ -49,6 +50,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form setup
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,32 +70,86 @@ const Signup = () => {
   // Form submission handler
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log("Form submitted with values:", values);
+      setIsLoading(true);
+      
+      // 1. Erstelle Supabase Auth Account
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            company_name: values.companyName
+          }
+        }
+      });
 
-      // Hier würde die Supabase-Integrationslogik kommen:
-      // 1. Erstelle neuen Eintrag in 'companies' Tabelle
-      // 2. Erstelle neuen User mit Supabase Auth
-      // 3. Speichere User-Informationen in 'users' Tabelle mit Verknüpfung zu company_id und role="admin"
-      // 4. Logge User automatisch ein
-      // 5. Speichere user, role, companyId in sessionStorage oder Context
+      if (authError) throw authError;
+      
+      if (!authData.user) {
+        throw new Error("Benutzer konnte nicht erstellt werden");
+      }
+
+      // 2. Erstelle Unternehmen in der companies Tabelle
+      const { data: companyData, error: companyError } = await supabase
+        .from('companies')
+        .insert([
+          {
+            name: values.companyName,
+            industry: values.industry,
+            size: values.companySize,
+            website: values.website || null,
+            email: values.email,
+          }
+        ])
+        .select('id')
+        .single();
+
+      if (companyError) throw companyError;
+
+      // 3. Erstelle Benutzerrolle in der user_roles Tabelle
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert([
+          {
+            user_id: authData.user.id,
+            company_id: companyData.id,
+            role: 'admin',
+          }
+        ]);
+
+      if (roleError) throw roleError;
 
       // Erfolgs-Toast anzeigen
       toast({
         title: "Konto erfolgreich erstellt!",
-        description: "Sie werden weitergeleitet..."
+        description: "Sie werden zum Dashboard weitergeleitet..."
       });
 
       // Nach kurzer Verzögerung zum Dashboard weiterleiten
       setTimeout(() => {
         navigate("/admin/dashboard");
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Signup error:", error);
+      
+      let errorMessage = "Fehler bei der Registrierung";
+      
+      if (error.message) {
+        // Bekannte Supabase Fehlermeldungen übersetzen
+        if (error.message.includes("Email already registered")) {
+          errorMessage = "Diese E-Mail ist bereits registriert";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast({
         variant: "destructive",
-        title: "Fehler bei der Registrierung",
-        description: "Bitte versuchen Sie es später erneut."
+        title: "Registrierung fehlgeschlagen",
+        description: errorMessage
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -221,7 +277,6 @@ const Signup = () => {
                   <FormControl>
                     <div className="relative">
                       <Input placeholder="kontakt@ihre-firma.de" {...field} className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue" />
-                      <Mail className="absolute right-3 top-2.5 h-5 w-5 text-tactflux-blue" />
                     </div>
                   </FormControl>
                   <FormMessage className="text-red-400" />
@@ -303,8 +358,9 @@ const Signup = () => {
               type="submit" 
               variant="tactflux-gradient" 
               className="w-full font-medium mt-8 py-6 rounded-full"
+              disabled={isLoading}
             >
-              Unternehmen registrieren
+              {isLoading ? "Registrierung läuft..." : "Unternehmen registrieren"}
             </Button>
           </form>
         </Form>
