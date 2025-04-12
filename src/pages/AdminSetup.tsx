@@ -52,24 +52,32 @@ const AdminSetup = () => {
     setIsLoading(true);
 
     try {
-      // Prüfen, ob der Benutzer existiert, indem wir nach der E-Mail in user_roles suchen
-      const { data: userData, error: userError } = await supabase.auth.getUser();
+      // Direkter Ansatz: Wir erstellen einen Admin-Eintrag, unabhängig vom eingeloggten Benutzer
+      // Prüfen, ob ein Benutzer mit dieser E-Mail existiert
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: email,
+        password: "Admin123!", // Standardpasswort, das der Benutzer später ändern sollte
+      });
 
-      if (userError) {
-        throw userError;
+      if (authError && !authError.message.includes("already")) {
+        throw authError;
       }
 
-      let userId = userData?.user?.id;
+      // Wir warten einen Moment, um sicherzustellen, dass der Benutzer erstellt wurde
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Wenn kein Benutzer angemeldet ist, müssen wir anders vorgehen
+      // Wir versuchen, den Benutzer mit den Anmeldeinformationen zu finden
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: "Admin123!",
+      });
+
+      // Wenn der Login erfolgreich war oder wir bereits angemeldet sind
+      const userId = signInData?.user?.id;
+      
       if (!userId) {
-        toast.info("Sie müssen sich zuerst registrieren, bevor Sie Adminrechte zuweisen können.", {
-          description: "Bitte registrieren Sie sich unter /signup und versuchen Sie es dann erneut."
-        });
+        toast.error("Benutzer konnte nicht gefunden werden");
         setIsLoading(false);
-        setTimeout(() => {
-          navigate("/signup");
-        }, 3000);
         return;
       }
 
@@ -149,7 +157,7 @@ const AdminSetup = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-tactflux-input border border-tactflux-border text-white"
+                className="bg-gray-700 border border-tactflux-border text-white"
               />
             </div>
             <div className="space-y-2">
@@ -160,7 +168,7 @@ const AdminSetup = () => {
                 id="company"
                 value={selectedCompany || ""}
                 onChange={(e) => setSelectedCompany(e.target.value)}
-                className="w-full p-2 rounded-md bg-tactflux-input border border-tactflux-border text-white"
+                className="w-full p-2 rounded-md bg-gray-700 border border-tactflux-border text-white"
               >
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
