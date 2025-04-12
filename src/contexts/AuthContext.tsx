@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -68,8 +67,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Explicitly type the role as AppRole
       const userRoleValue = userRole?.role as AppRole;
+      
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
         setUserRole({ role: "superadmin" });
@@ -90,13 +89,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       setIsSuperAdmin(false);
+      setUserRole({ role: userRoleValue });
 
       if (!userRole?.company_id) {
         console.error("Keine Firma mit diesem Benutzer verknüpft");
         return;
       }
-
-      setUserRole({ role: userRole.role as AppRole });
 
       const { data: company, error: companyError } = await supabase
         .from("companies")
