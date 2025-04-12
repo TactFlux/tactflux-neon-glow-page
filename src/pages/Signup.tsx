@@ -38,8 +38,8 @@ const formSchema = z.object({
     .regex(/[0-9]/, {
       message: "Das Passwort muss mindestens eine Zahl enthalten.",
     }),
-  terms: z.literal(true, {
-    errorMap: () => ({ message: "Sie müssen die AGB akzeptieren." }),
+  terms: z.boolean().refine((val) => val === true, {
+    message: "Sie müssen die AGB akzeptieren.",
   }),
 });
 
