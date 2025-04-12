@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: "superadmin" });
+        setUserRole({ role: "superadmin" as AppRole });
         
         const { data: companies, error: companiesError } = await supabase
           .from("companies")
