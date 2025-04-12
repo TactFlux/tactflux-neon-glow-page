@@ -16,6 +16,7 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AdminSetup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +27,7 @@ const AdminSetup = () => {
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const { session } = useAuth();
   const navigate = useNavigate();
 
   // Fetch available companies
@@ -56,6 +58,13 @@ const AdminSetup = () => {
     fetchCompanies();
   }, []);
 
+  // If user is already logged in, redirect to dashboard
+  useEffect(() => {
+    if (session?.user) {
+      navigate("/admin/dashboard");
+    }
+  }, [session, navigate]);
+
   const setupAdminAccess = async () => {
     if (!selectedCompany || !email) {
       toast.error("Bitte wählen Sie ein Unternehmen und geben Sie eine E-Mail-Adresse ein.");
@@ -65,29 +74,40 @@ const AdminSetup = () => {
     setIsLoading(true);
 
     try {
-      // 1. Versuchen, einen neuen Benutzer zu erstellen (oder zu prüfen, ob er existiert)
+      // 1. Versuchen, einen neuen Benutzer zu erstellen
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: email,
-        password: password, // Verwenden des festgelegten Passworts
+        password: password,
       });
 
-      // Wenn der Benutzer bereits existiert, ist das kein Problem
-      if (signUpError && !signUpError.message.includes("already")) {
-        throw signUpError;
+      // Wenn der Benutzer bereits existiert, zeigen wir den Login-Dialog an
+      if (signUpError) {
+        console.log("Fehler beim Registrieren:", signUpError);
+        
+        if (signUpError.message.includes("already")) {
+          toast.info("Benutzer existiert bereits", {
+            description: "Bitte melden Sie sich mit Ihren bestehenden Zugangsdaten an."
+          });
+          setLoginEmail(email);
+          setShowLoginDialog(true);
+          setIsLoading(false);
+          return;
+        } else {
+          throw signUpError;
+        }
       }
 
-      // 2. Anmelden als dieser Benutzer, um seine ID zu erhalten
+      // 2. Anmelden als dieser Benutzer
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
 
       if (signInError) {
-        // Wenn die Anmeldung fehlschlägt, zeigen wir eine hilfreiche Nachricht
+        console.log("Fehler beim Anmelden:", signInError);
         toast.error("Anmeldung fehlgeschlagen", {
-          description: "Benutzer existiert möglicherweise bereits mit einem anderen Passwort."
+          description: signInError.message
         });
-        // Dialog zum manuellen Login anzeigen
         setLoginEmail(email);
         setShowLoginDialog(true);
         setIsLoading(false);
@@ -102,7 +122,7 @@ const AdminSetup = () => {
         return;
       }
 
-      // 3. Prüfen, ob bereits eine Rollenzuweisung existiert
+      // 3. Admin-Rolle zuweisen
       const { data: existingRole, error: roleCheckError } = await supabase
         .from("user_roles")
         .select("id")
@@ -114,8 +134,8 @@ const AdminSetup = () => {
         throw roleCheckError;
       }
 
-      // 4. Rollenzuweisung aktualisieren oder erstellen
       if (existingRole) {
+        // Update existing role
         const { error: updateError } = await supabase
           .from("user_roles")
           .update({ role: "admin" })
@@ -125,7 +145,7 @@ const AdminSetup = () => {
           throw updateError;
         }
       } else {
-        // Neue Rollenzuweisung erstellen
+        // Create new role
         const { error: insertError } = await supabase
           .from("user_roles")
           .insert({
@@ -143,10 +163,10 @@ const AdminSetup = () => {
         description: `Sie können sich jetzt als Administrator mit der E-Mail ${email} und dem Passwort "${password}" anmelden.`
       });
 
-      // Zur Dashboard-Seite weiterleiten
+      // Wait a moment before redirecting to dashboard
       setTimeout(() => {
         navigate("/admin/dashboard");
-      }, 2000);
+      }, 1500);
     } catch (error) {
       console.error("Fehler beim Einrichten des Admin-Zugangs:", error);
       toast.error("Fehler beim Einrichten des Admin-Zugangs", {
@@ -206,7 +226,7 @@ const AdminSetup = () => {
 
       setTimeout(() => {
         navigate("/admin/dashboard");
-      }, 2000);
+      }, 1500);
     } catch (error: any) {
       console.error("Fehler beim manuellen Login:", error);
       toast.error("Anmeldung fehlgeschlagen", {
@@ -214,7 +234,6 @@ const AdminSetup = () => {
       });
     } finally {
       setIsLoading(false);
-      setShowLoginDialog(false);
     }
   };
 
@@ -267,11 +286,15 @@ const AdminSetup = () => {
                 onChange={(e) => setSelectedCompany(e.target.value)}
                 className="w-full p-2 rounded-md bg-gray-700 border border-tactflux-border text-white"
               >
-                {companies.map((company) => (
-                  <option key={company.id} value={company.id}>
-                    {company.name}
-                  </option>
-                ))}
+                {companies.length > 0 ? (
+                  companies.map((company) => (
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>Keine Unternehmen verfügbar</option>
+                )}
               </select>
             </div>
           </CardContent>
