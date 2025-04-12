@@ -7,10 +7,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-// Create a component to handle external redirects
+// Create a component to handle external redirects properly
 const ExternalRedirect = ({ to }: { to: string }) => {
-  window.location.href = to;
-  return null;
+  // Use useEffect to handle the redirection after component mount
+  React.useEffect(() => {
+    window.location.href = to;
+  }, [to]);
+  
+  // Return loading state or null while redirecting
+  return <div className="min-h-screen flex items-center justify-center">Redirecting...</div>;
 };
 
 const queryClient = new QueryClient();
