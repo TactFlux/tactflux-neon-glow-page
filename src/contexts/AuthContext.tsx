@@ -19,6 +19,7 @@ type AuthContextType = {
   companyInfo: CompanyInfo | null;
   loading: boolean;
   refreshCompanyInfo: () => Promise<void>;
+  checkAdminStatus: (userId: string) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthContextType>({
   companyInfo: null,
   loading: true,
   refreshCompanyInfo: async () => {},
+  checkAdminStatus: async () => false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -80,6 +82,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const checkAdminStatus = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      if (error) {
+        console.error("Fehler bei der Überprüfung des Admin-Status:", error);
+        return false;
+      }
+
+      return data?.role === "admin";
+    } catch (error) {
+      console.error("Fehler bei der Überprüfung des Admin-Status:", error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -112,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, companyInfo, loading, refreshCompanyInfo }}>
+    <AuthContext.Provider value={{ session, user, companyInfo, loading, refreshCompanyInfo, checkAdminStatus }}>
       {children}
     </AuthContext.Provider>
   );
