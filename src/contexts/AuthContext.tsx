@@ -76,7 +76,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userRoleValue = userRole?.role as string;
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: "superadmin" });
+        // Need to use as AppRole since our AppRole type includes "superadmin"
+        setUserRole({ role: "superadmin" as AppRole });
         
         // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
