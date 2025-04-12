@@ -1,6 +1,6 @@
 
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import TactFluxLogo from "@/components/TactFluxLogo";
 
 // Form schema für Validierung
 const formSchema = z.object({
@@ -37,8 +38,8 @@ const formSchema = z.object({
 const Signup = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Form setup
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,25 +81,37 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Konto erstellen</h1>
+    <div className="min-h-screen bg-tactflux-dark flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="hero-glow absolute top-1/4 left-1/4 bg-tactflux-neon opacity-20"></div>
+      <div className="hero-glow absolute bottom-1/4 right-1/4 bg-tactflux-blue opacity-20"></div>
+      
+      <div className="glass-card border border-white/10 p-8 rounded-xl w-full max-w-md backdrop-blur-md bg-black/40 relative z-10 shadow-card">
+        <div className="mb-6 flex justify-center">
+          <TactFluxLogo />
+        </div>
+        
+        <h1 className="text-2xl font-bold mb-6 text-center text-white">Konto erstellen</h1>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
               name="companyName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Firmenname</FormLabel>
+                  <FormLabel className="text-white">Firmenname</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input placeholder="Ihre Firma GmbH" {...field} />
-                      <Building className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Input 
+                        placeholder="Ihre Firma GmbH" 
+                        {...field} 
+                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue"
+                      />
+                      <Building className="absolute right-3 top-2.5 h-5 w-5 text-tactflux-blue" />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -108,14 +121,18 @@ const Signup = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-Mail</FormLabel>
+                  <FormLabel className="text-white">E-Mail</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input placeholder="ihre.email@beispiel.de" {...field} />
-                      <Mail className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Input 
+                        placeholder="ihre.email@beispiel.de" 
+                        {...field} 
+                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue"
+                      />
+                      <Mail className="absolute right-3 top-2.5 h-5 w-5 text-tactflux-blue" />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -125,18 +142,19 @@ const Signup = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Passwort</FormLabel>
+                  <FormLabel className="text-white">Passwort</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input 
                         type={showPassword ? "text" : "password"}
                         placeholder="Passwort eingeben" 
                         {...field} 
+                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue"
                       />
                       <button 
                         type="button" 
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-2.5 text-gray-400"
+                        className="absolute right-3 top-2.5 text-tactflux-blue"
                       >
                         {showPassword ? (
                           <EyeOff className="h-5 w-5" />
@@ -146,7 +164,7 @@ const Signup = () => {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -156,18 +174,19 @@ const Signup = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Passwort bestätigen</FormLabel>
+                  <FormLabel className="text-white">Passwort bestätigen</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input 
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Passwort wiederholen" 
                         {...field} 
+                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue"
                       />
                       <button 
                         type="button" 
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-2.5 text-gray-400"
+                        className="absolute right-3 top-2.5 text-tactflux-blue"
                       >
                         {showConfirmPassword ? (
                           <EyeOff className="h-5 w-5" />
@@ -177,23 +196,27 @@ const Signup = () => {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full">
+            <Button 
+              type="submit" 
+              variant="tactflux-gradient"
+              className="w-full font-medium mt-6 rounded-full"
+            >
               Registrieren
             </Button>
           </form>
         </Form>
 
         <div className="mt-6 text-center">
-          <p>
+          <p className="text-gray-300">
             Bereits registriert?{" "}
-            <a href="/" className="text-blue-600 hover:underline">
+            <Link to="/" className="text-tactflux-blue hover:text-tactflux-purple hover:underline transition-colors">
               Zur Anmeldung
-            </a>
+            </Link>
           </p>
         </div>
       </div>
