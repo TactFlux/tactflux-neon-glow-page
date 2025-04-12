@@ -13,7 +13,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Update the AppRole type to include "superadmin"
+// Update the AppRole type to explicitly include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      const userRoleValue = userRole?.role as string;
+      const userRoleValue = userRole?.role as AppRole;
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
         setUserRole({ role: "superadmin" });
@@ -204,3 +204,5 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
