@@ -1,377 +1,385 @@
-
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Building, Globe, Briefcase, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import Header from "@/components/Header";
+import { toast } from "sonner";
 
-// Form schema für Validierung
 const formSchema = z.object({
+  email: z.string().email({
+    message: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+  }),
+  password: z
+    .string()
+    .min(8, {
+      message: "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    })
+    .regex(/[A-Z]/, {
+      message: "Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+    })
+    .regex(/[a-z]/, {
+      message: "Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+    })
+    .regex(/[0-9]/, {
+      message: "Das Passwort muss mindestens eine Zahl enthalten.",
+    }),
+  terms: z.literal(true, {
+    errorMap: () => ({ message: "Sie müssen die AGB akzeptieren." }),
+  }),
+});
+
+const companyFormSchema = z.object({
   companyName: z.string().min(2, {
-    message: "Firmenname muss mindestens 2 Zeichen lang sein."
+    message: "Der Firmenname muss mindestens 2 Zeichen lang sein.",
   }),
-  industry: z.string().min(1, {
-    message: "Bitte wählen Sie eine Branche aus."
+  industry: z.string().min(2, {
+    message: "Bitte geben Sie eine Branche an.",
   }),
-  companySize: z.string().min(1, {
-    message: "Bitte wählen Sie eine Unternehmensgröße aus."
+  companySize: z.enum(["1-10", "11-50", "51-200", "200+"], {
+    required_error: "Bitte wählen Sie eine Unternehmensgröße aus.",
+  }),
+  companyEmail: z.string().email({
+    message: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
   }),
   website: z.string().url({
-    message: "Bitte geben Sie eine gültige URL ein."
-  }).optional().or(z.literal('')),
-  email: z.string().email({
-    message: "Bitte geben Sie eine gültige E-Mail-Adresse ein."
-  }),
-  password: z.string().min(8, {
-    message: "Passwort muss mindestens 8 Zeichen lang sein."
-  }).regex(/^(?=.*[A-Z])(?=.*[0-9])/, {
-    message: "Passwort muss mindestens einen Großbuchstaben und eine Zahl enthalten."
-  }),
-  confirmPassword: z.string(),
-  termsAccepted: z.boolean().refine(val => val === true, {
-    message: "Sie müssen die AGB und Datenschutzerklärung akzeptieren.",
-  }),
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwörter stimmen nicht überein",
-  path: ["confirmPassword"]
+    message: "Bitte geben Sie eine gültige URL ein.",
+  }).optional(),
 });
 
 const Signup = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Form setup
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
-      industry: "",
-      companySize: "",
-      website: "",
       email: "",
       password: "",
-      confirmPassword: "",
-      termsAccepted: false,
-    }
+      terms: false,
+    },
   });
 
-  // Form submission handler
+  const companyForm = useForm<z.infer<typeof companyFormSchema>>({
+    resolver: zodResolver(companyFormSchema),
+    defaultValues: {
+      companyName: "",
+      industry: "",
+      companySize: "1-10" as const,
+      companyEmail: "",
+      website: "",
+    },
+  });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      
-      // 1. Erstelle Supabase Auth Account
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
-        options: {
-          data: {
-            company_name: values.companyName
-          }
-        }
       });
 
-      if (authError) throw authError;
-      
-      if (!authData.user) {
-        throw new Error("Benutzer konnte nicht erstellt werden");
-      }
-
-      // Konvertiere den companySize-Wert in den korrekten Enum-Typ
-      const companySize = values.companySize as Database["public"]["Enums"]["company_size"];
-      
-      // 2. Erstelle Unternehmen in der companies Tabelle
-      const { data: companyData, error: companyError } = await supabase
-        .from('companies')
-        .insert({
-          name: values.companyName,
-          industry: values.industry,
-          size: companySize,
-          website: values.website || null,
-          email: values.email,
-        })
-        .select('id')
-        .single();
-
-      if (companyError) throw companyError;
-
-      // 3. Erstelle Benutzerrolle in der user_roles Tabelle
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({
-          user_id: authData.user.id,
-          company_id: companyData.id,
-          role: 'admin',
+      if (error) {
+        toast.error("Fehler bei der Registrierung", {
+          description: error.message,
         });
-
-      if (roleError) throw roleError;
-
-      // Erfolgs-Toast anzeigen
-      toast({
-        title: "Konto erfolgreich erstellt!",
-        description: "Sie werden zum Dashboard weitergeleitet..."
-      });
-
-      // Nach kurzer Verzögerung zum Dashboard weiterleiten
-      setTimeout(() => {
-        navigate("/admin/dashboard");
-      }, 2000);
-    } catch (error: any) {
-      console.error("Signup error:", error);
-      
-      let errorMessage = "Fehler bei der Registrierung";
-      
-      if (error.message) {
-        // Bekannte Supabase Fehlermeldungen übersetzen
-        if (error.message.includes("Email already registered")) {
-          errorMessage = "Diese E-Mail ist bereits registriert";
-        } else {
-          errorMessage = error.message;
-        }
+        return;
       }
-      
-      toast({
-        variant: "destructive",
-        title: "Registrierung fehlgeschlagen",
-        description: errorMessage
-      });
+
+      if (data.user) {
+        setUserId(data.user.id);
+        setCurrentStep(2);
+        companyForm.setValue("companyEmail", values.email);
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      toast.error("Ein unerwarteter Fehler ist aufgetreten");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const industries = [
-    "Automobil", "Bauwesen", "Bildung", "Dienstleistungen", "E-Commerce",
-    "Energie", "Finanzen", "Gesundheitswesen", "Handel", "Immobilien",
-    "IT & Software", "Logistik", "Maschinenbau", "Medien", "Telekommunikation",
-    "Tourismus", "Versicherungen", "Sonstige"
-  ];
+  const onCompanySubmit = async (values: z.infer<typeof companyFormSchema>) => {
+    if (!userId) return;
 
-  const companySizes = [
-    { value: "1-10", label: "1–10 Mitarbeiter" },
-    { value: "11-50", label: "11–50 Mitarbeiter" },
-    { value: "51-200", label: "51–200 Mitarbeiter" },
-    { value: "200+", label: "200+ Mitarbeiter" }
-  ];
+    setIsLoading(true);
+    try {
+      // Erstelle Firmeneintrag
+      const { data: companyData, error: companyError } = await supabase
+        .from("companies")
+        .insert({
+          name: values.companyName,
+          industry: values.industry,
+          size: values.companySize as Database["public"]["Enums"]["company_size"],
+          email: values.companyEmail,
+          website: values.website || null,
+        })
+        .select()
+        .single();
+
+      if (companyError) {
+        toast.error("Fehler beim Erstellen des Unternehmens", {
+          description: companyError.message,
+        });
+        return;
+      }
+
+      // Verknüpfe Benutzer mit Firma
+      const { error: roleError } = await supabase.from("user_roles").insert({
+        user_id: userId,
+        company_id: companyData.id,
+        role: "admin",
+      });
+
+      if (roleError) {
+        toast.error("Fehler beim Zuweisen der Benutzerrolle", {
+          description: roleError.message,
+        });
+        return;
+      }
+
+      toast.success("Registrierung erfolgreich", {
+        description: "Ihr Konto wurde erfolgreich erstellt.",
+      });
+
+      // Weiterleitung zum Dashboard
+      window.location.href = "/admin/dashboard";
+    } catch (error) {
+      console.error("Company registration error:", error);
+      toast.error("Ein unerwarteter Fehler ist aufgetreten");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-tactflux-dark flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="hero-glow absolute top-1/4 left-1/4 bg-tactflux-neon opacity-20"></div>
-      <div className="hero-glow absolute bottom-1/4 right-1/4 bg-tactflux-blue opacity-20"></div>
-      
-      <div className="glass-card border border-white/10 p-8 rounded-xl w-full max-w-2xl backdrop-blur-md bg-black/40 relative z-10 shadow-card">
-        <div className="mb-8 flex justify-center my-6">
-          <Logo />
-        </div>
-        
-        <h1 className="text-3xl font-bold mb-6 text-center text-white">Unternehmenskonto erstellen</h1>
-        <p className="mb-8 text-gray-300 text-center">
-          Registrieren Sie Ihr Unternehmen und profitieren Sie von unseren Services.
-        </p>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Firmenname */}
-              <FormField control={form.control} name="companyName" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Firmenname</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input placeholder="Ihre Firma GmbH" {...field} className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue" />
-                      <Building className="absolute right-3 top-2.5 h-5 w-5 text-tactflux-blue" />
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* Branche */}
-              <FormField control={form.control} name="industry" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Branche</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <div className="relative">
-                        <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-tactflux-blue">
-                          <SelectValue placeholder="Branche auswählen" />
-                        </SelectTrigger>
-                        <Briefcase className="absolute right-10 top-2.5 h-5 w-5 text-tactflux-blue pointer-events-none" />
-                      </div>
-                    </FormControl>
-                    <SelectContent className="max-h-[300px] bg-black/90 border-white/20 text-white">
-                      {industries.map(industry => (
-                        <SelectItem key={industry} value={industry} className="focus:bg-white/10 focus:text-white">
-                          {industry}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* Unternehmensgröße */}
-              <FormField control={form.control} name="companySize" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Unternehmensgröße</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <div className="relative">
-                        <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-tactflux-blue">
-                          <SelectValue placeholder="Unternehmensgröße wählen" />
-                        </SelectTrigger>
-                        <Users className="absolute right-10 top-2.5 h-5 w-5 text-tactflux-blue pointer-events-none" />
-                      </div>
-                    </FormControl>
-                    <SelectContent className="bg-black/90 border-white/20 text-white">
-                      {companySizes.map(size => (
-                        <SelectItem key={size.value} value={size.value} className="focus:bg-white/10 focus:text-white">
-                          {size.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* Firmen-Website */}
-              <FormField control={form.control} name="website" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Firmen-Website (optional)</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input placeholder="https://www.example.com" {...field} className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue" />
-                      <Globe className="absolute right-3 top-2.5 h-5 w-5 text-tactflux-blue" />
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* E-Mail */}
-              <FormField control={form.control} name="email" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Firmen-E-Mail</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input placeholder="kontakt@ihre-firma.de" {...field} className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue" />
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* Passwort */}
-              <FormField control={form.control} name="password" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Passwort</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input 
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Min. 8 Zeichen inkl. Großbuchstabe und Zahl"
-                        {...field}
-                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue pr-12"
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-2.5 text-tactflux-blue"
-                      >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
-
-              {/* Passwort bestätigen */}
-              <FormField control={form.control} name="confirmPassword" render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Passwort bestätigen</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input 
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Passwort wiederholen"
-                        {...field}
-                        className="bg-white/10 border-white/20 text-white focus-visible:ring-tactflux-blue pr-12"
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-2.5 text-tactflux-blue"
-                      >
-                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-400" />
-                </FormItem>
-              )} />
+    <div className="min-h-screen bg-gray-100">
+      <Header />
+      <div className="container mx-auto px-4 pt-24 pb-12">
+        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+          <div className="mb-6 text-center">
+            <div className="flex justify-center mb-4">
+              <Logo />
             </div>
+            <h1 className="text-2xl font-bold">
+              {currentStep === 1 ? "Konto erstellen" : "Unternehmensdaten"}
+            </h1>
+            <p className="text-gray-600 mt-2">
+              {currentStep === 1
+                ? "Erstellen Sie Ihr persönliches Konto bei TactFlux"
+                : "Teilen Sie uns mehr über Ihr Unternehmen mit"}
+            </p>
+          </div>
 
-            {/* AGB & Datenschutz Checkbox */}
-            <FormField control={form.control} name="termsAccepted" render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox 
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="data-[state=checked]:bg-tactflux-blue data-[state=checked]:border-tactflux-blue"
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="text-gray-300 text-sm font-normal">
-                    Ich akzeptiere die <Link to="/agb" className="text-tactflux-blue hover:underline">AGB</Link> und 
-                    <Link to="/datenschutz" className="text-tactflux-blue hover:underline"> Datenschutzerklärung</Link>
-                  </FormLabel>
-                  <FormMessage className="text-red-400" />
+          {currentStep === 1 ? (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>E-Mail</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="ihre.email@beispiel.de"
+                          {...field}
+                          autoComplete="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Passwort</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                          autoComplete="new-password"
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Mindestens 8 Zeichen, ein Großbuchstabe, ein
+                        Kleinbuchstabe und eine Zahl.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="terms"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          Ich akzeptiere die{" "}
+                          <a
+                            href="#"
+                            className="text-tactflux-blue hover:underline"
+                          >
+                            Allgemeinen Geschäftsbedingungen
+                          </a>{" "}
+                          und{" "}
+                          <a
+                            href="#"
+                            className="text-tactflux-blue hover:underline"
+                          >
+                            Datenschutzrichtlinien
+                          </a>
+                          .
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  className="w-full"
+                  variant="tactflux-gradient"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Wird erstellt..." : "Konto erstellen"}
+                </Button>
+              </form>
+            </Form>
+          ) : (
+            <Form {...companyForm}>
+              <form
+                onSubmit={companyForm.handleSubmit(onCompanySubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={companyForm.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Firmenname</FormLabel>
+                      <FormControl>
+                        <Input placeholder="TactFlux GmbH" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={companyForm.control}
+                  name="industry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Branche</FormLabel>
+                      <FormControl>
+                        <Input placeholder="IT, Gesundheit, etc." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={companyForm.control}
+                  name="companySize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Unternehmensgröße</FormLabel>
+                      <FormControl>
+                        <select
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          {...field}
+                        >
+                          <option value="1-10">1-10 Mitarbeiter</option>
+                          <option value="11-50">11-50 Mitarbeiter</option>
+                          <option value="51-200">51-200 Mitarbeiter</option>
+                          <option value="200+">Über 200 Mitarbeiter</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={companyForm.control}
+                  name="companyEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Firmen-E-Mail</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="kontakt@ihrefirma.de"
+                          {...field}
+                          autoComplete="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={companyForm.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Website (optional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://www.ihrefirma.de"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex space-x-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => setCurrentStep(1)}
+                    disabled={isLoading}
+                  >
+                    Zurück
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="tactflux-gradient"
+                    className="flex-1"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Wird erstellt..." : "Registrierung abschließen"}
+                  </Button>
                 </div>
-              </FormItem>
-            )} />
-
-            <Button 
-              type="submit" 
-              variant="tactflux-gradient" 
-              className="w-full font-medium mt-8 py-6 rounded-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Registrierung läuft..." : "Unternehmen registrieren"}
-            </Button>
-          </form>
-        </Form>
-
-        <div className="mt-8 text-center">
-          <p className="text-gray-300">
-            Bereits registriert?{" "}
-            <Link to="/" className="text-tactflux-blue hover:text-tactflux-purple hover:underline transition-colors">
-              Zur Anmeldung
-            </Link>
-          </p>
+              </form>
+            </Form>
+          )}
         </div>
       </div>
     </div>
