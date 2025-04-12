@@ -15,6 +15,7 @@ type CompanyInfo = {
 };
 
 // Update the role type to include "superadmin"
+// Make sure the role is defined as a union type that includes all possible values
 type UserRole = {
   role: "user" | "admin" | "member" | "superadmin";
 };
@@ -68,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Check if user is superadmin
+      // Use type assertion to tell TypeScript that the role can be "superadmin"
       if (userRole?.role === "superadmin") {
         setIsSuperAdmin(true);
         setUserRole({ role: "superadmin" });
@@ -97,7 +99,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Set user role
-      setUserRole({ role: userRole.role });
+      // Use type assertion to tell TypeScript that the role is of valid type
+      setUserRole({ role: userRole.role as UserRole['role'] });
 
       // Hole die Firmendaten
       const { data: company, error: companyError } = await supabase
