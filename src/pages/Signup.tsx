@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -168,18 +169,18 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <div className="container mx-auto px-4 pt-24 pb-12">
-        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <div className="max-w-md mx-auto bg-card p-8 rounded-lg shadow-lg border border-border">
           <div className="mb-6 text-center">
             <div className="flex justify-center mb-4">
               <Logo />
             </div>
-            <h1 className="text-2xl font-bold">
+            <h1 className="text-2xl font-bold text-foreground">
               {currentStep === 1 ? "Konto erstellen" : "Unternehmensdaten"}
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-muted-foreground mt-2">
               {currentStep === 1
                 ? "Erstellen Sie Ihr persönliches Konto bei TactFlux"
                 : "Teilen Sie uns mehr über Ihr Unternehmen mit"}
@@ -200,6 +201,7 @@ const Signup = () => {
                           placeholder="ihre.email@beispiel.de"
                           {...field}
                           autoComplete="email"
+                          className="bg-secondary text-foreground"
                         />
                       </FormControl>
                       <FormMessage />
@@ -218,9 +220,10 @@ const Signup = () => {
                           placeholder="••••••••"
                           {...field}
                           autoComplete="new-password"
+                          className="bg-secondary text-foreground"
                         />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-muted-foreground">
                         Mindestens 8 Zeichen, ein Großbuchstabe, ein
                         Kleinbuchstabe und eine Zahl.
                       </FormDescription>
@@ -240,7 +243,7 @@ const Signup = () => {
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel>
+                        <FormLabel className="text-foreground">
                           Ich akzeptiere die{" "}
                           <a
                             href="#"
@@ -312,7 +315,7 @@ const Signup = () => {
                       <FormLabel>Unternehmensgröße</FormLabel>
                       <FormControl>
                         <select
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="flex h-10 w-full rounded-md border border-input bg-secondary text-foreground px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           {...field}
                         >
                           <option value="1-10">1-10 Mitarbeiter</option>
@@ -387,3 +390,4 @@ const Signup = () => {
 };
 
 export default Signup;
+
