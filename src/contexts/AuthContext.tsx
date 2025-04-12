@@ -72,12 +72,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Check if user is superadmin
-      // Using a string comparison instead of type checking
-      // This works because role is just a string in the database
-      if (userRole?.role === "superadmin") {
+      // Use a string comparison for the role value
+      const userRoleValue = userRole?.role as string;
+      if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        // Cast to AppRole type since we know it's valid in our application
-        setUserRole({ role: "superadmin" as AppRole });
+        setUserRole({ role: "superadmin" });
         
         // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
@@ -103,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Set user role - cast the database role to our AppRole type
+      // Set user role - cast to our AppRole type
       setUserRole({ role: userRole.role as AppRole });
 
       // Hole die Firmendaten
@@ -144,7 +143,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }
 
-      return data?.role === "admin" || data?.role === "superadmin";
+      // Use string comparison to check the role value
+      const roleValue = data?.role as string;
+      return roleValue === "admin" || roleValue === "superadmin";
     } catch (error) {
       console.error("Fehler bei der Überprüfung des Admin-Status:", error);
       return false;
