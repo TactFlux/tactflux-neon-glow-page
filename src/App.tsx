@@ -17,8 +17,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* Redirect to the external signup page */}
-          <Route path="/signup" element={<Navigate to="https://admin-app.tactflux.de/signup" replace />} />
+          {/* Redirect to the external signup page with a complete URL */}
+          <Route path="/signup" element={<Navigate to="https://admin-app.tactflux.de/signup" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
