@@ -13,9 +13,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Define a custom role type that extends the database enum
-// This allows us to add "superadmin" which is handled in application logic
-// but might not be defined in the database enum
+// Modify the AppRole type to include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
