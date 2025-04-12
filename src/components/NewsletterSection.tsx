@@ -42,7 +42,8 @@ const NewsletterSection: React.FC = () => {
             />
             <Button 
               type="submit" 
-              className="bg-tactflux-blue hover:bg-tactflux-blue/90 text-black blue-neon-border whitespace-nowrap"
+              variant="tactflux-gradient"
+              className="rounded-full whitespace-nowrap"
             >
               Abonnieren
             </Button>

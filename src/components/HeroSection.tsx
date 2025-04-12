@@ -30,8 +30,8 @@ const HeroSection: React.FC = () => {
             <div className="flex flex-wrap gap-4">
               <Button 
                 onClick={() => scrollToSection('features')}
-                variant="tactflux-static"
-                className="text-lg px-6 py-2 hover:scale-105 active:scale-95 transition-transform duration-300"
+                variant="tactflux-gradient"
+                className="text-lg px-6 py-2 rounded-full"
               >
                 Mehr erfahren <ArrowRight className="ml-2" size={18} />
               </Button>

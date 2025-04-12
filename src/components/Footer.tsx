@@ -1,5 +1,9 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 import Logo from './Logo';
+
 const Footer: React.FC = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -9,6 +13,7 @@ const Footer: React.FC = () => {
       });
     }
   };
+  
   return <footer className="bg-black bg-opacity-50 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -17,6 +22,19 @@ const Footer: React.FC = () => {
             <p className="mt-4 text-gray-400 text-sm text-left">
               Das innovative Bewerberbewertungssystem für kreative Problemlösungsfähigkeiten.
             </p>
+            
+            <div className="mt-6">
+              <Button 
+                asChild
+                variant="tactflux-gradient"
+                className="px-4 rounded-full text-sm"
+                size="sm"
+              >
+                <Link to="/signup">
+                  Kostenlos starten
+                </Link>
+              </Button>
+            </div>
           </div>
           
           <div>
@@ -130,4 +148,5 @@ const Footer: React.FC = () => {
       </div>
     </footer>;
 };
+
 export default Footer;

@@ -144,9 +144,9 @@ const FeaturesSection: React.FC = () => {
         <div className="mt-12 text-center">
           <Button 
             asChild
-            variant="tactflux-cta" 
+            variant="tactflux-gradient" 
             size="cta" 
-            className="mx-auto shadow-neon-blue-hover ring-tactflux-blue ring-offset-2 focus:ring-2 transform transition-all hover:scale-105"
+            className="mx-auto rounded-full"
           >
             <Link to="/signup">
               Kostenlosen TactFlux-Account erstellen

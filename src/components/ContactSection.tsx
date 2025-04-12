@@ -1,13 +1,14 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { MailIcon, MessageSquare, Send } from 'lucide-react';
+
 const ContactSection: React.FC = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -18,6 +19,7 @@ const ContactSection: React.FC = () => {
       duration: 5000
     });
   };
+  
   return <section className="section-container" id="contact">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -76,7 +78,11 @@ const ContactSection: React.FC = () => {
                 <Textarea id="message" name="message" placeholder="Ihre Nachricht..." rows={5} required className="bg-white/5 border-white/10 text-white" />
               </div>
               
-              <Button type="submit" className="bg-tactflux-neon hover:bg-tactflux-neon/90 text-black neon-border w-full">
+              <Button 
+                type="submit" 
+                variant="tactflux-gradient" 
+                className="w-full rounded-full"
+              >
                 Nachricht senden <Send size={16} className="ml-2" />
               </Button>
             </form>
@@ -85,4 +91,5 @@ const ContactSection: React.FC = () => {
       </div>
     </section>;
 };
+
 export default ContactSection;

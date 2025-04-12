@@ -89,9 +89,9 @@ const AboutUsSection: React.FC = () => {
         <div className="mt-16 text-center">
           <Button 
             asChild
-            variant="tactflux-cta" 
+            variant="tactflux-gradient" 
             size="cta"
-            className="mx-auto py-2 ring-tactflux-blue ring-offset-2 focus:ring-2"
+            className="mx-auto py-2 rounded-full"
           >
             <Link to="/signup">
               Jetzt mit TactFlux starten

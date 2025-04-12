@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -116,6 +115,11 @@
     background: linear-gradient(90deg, #ff00ff, #8b5cf6, #00e8ff, #ff00ff);
     background-size: 300% 100%;
     animation: gradient-shift 8s ease infinite;
+  }
+  
+  /* New static gradient for buttons */
+  .bg-tactflux-gradient {
+    background: linear-gradient(90deg, #00EEFF 0%, #9747FF 100%);
   }
 }
 

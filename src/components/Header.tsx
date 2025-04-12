@@ -55,8 +55,8 @@ const Header: React.FC = () => {
           <div className="hidden md:flex items-center space-x-4">
             <Button 
               asChild
-              variant="tactflux" 
-              className="shadow-lg text-white font-medium rounded-2xl"
+              variant="tactflux-gradient" 
+              className="shadow-lg font-medium rounded-full px-6"
             >
               <Link to="/signup">
                 Kostenlosen Account erstellen
@@ -89,8 +89,8 @@ const Header: React.FC = () => {
             <div className="mt-4">
               <Button 
                 asChild
-                variant="tactflux-cta" 
-                className="w-full font-medium"
+                variant="tactflux-gradient" 
+                className="w-full font-medium rounded-full"
               >
                 <Link to="/signup">
                   Jetzt kostenlos starten

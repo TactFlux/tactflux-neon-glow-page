@@ -11,7 +11,6 @@ interface PricingCardProps {
   isPopular?: boolean;
   buttonText: string;
   borderClass: string;
-  cardGlowClass: string;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({ 
@@ -21,8 +20,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   features, 
   isPopular, 
   buttonText,
-  borderClass,
-  cardGlowClass
+  borderClass
 }) => {
   return (
     <div className={`glass-card p-6 relative ${isPopular ? 'transform-gpu scale-105 border border-tactflux-neon/30' : ''}`}>
@@ -52,7 +50,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
       
       <div>
         <Button 
-          className={`w-full ${cardGlowClass} ${borderClass} py-2`}
+          variant="tactflux-gradient"
+          className={`w-full rounded-full py-2 ${borderClass}`}
         >
           {buttonText}
         </Button>
@@ -77,7 +76,6 @@ const PricingSection: React.FC = () => {
       isPopular: false,
       buttonText: "API-Zugang anfordern",
       borderClass: "border-tactflux-blue/40 hover:border-tactflux-blue/80",
-      cardGlowClass: "bg-tactflux-blue/10 hover:bg-tactflux-blue/20 text-white"
     },
     {
       title: "API Business",
@@ -93,8 +91,7 @@ const PricingSection: React.FC = () => {
       ],
       isPopular: true,
       buttonText: "API-Demo vereinbaren",
-      borderClass: "neon-border",
-      cardGlowClass: "bg-tactflux-neon hover:bg-tactflux-neon/90 text-black"
+      borderClass: ""
     },
     {
       title: "API Enterprise",
@@ -110,8 +107,7 @@ const PricingSection: React.FC = () => {
       ],
       isPopular: false,
       buttonText: "Enterprise-Lösung anfragen",
-      borderClass: "border-tactflux-purple/40 hover:border-tactflux-purple/80",
-      cardGlowClass: "bg-tactflux-purple/10 hover:bg-tactflux-purple/20 text-white"
+      borderClass: "border-tactflux-purple/40 hover:border-tactflux-purple/80"
     }
   ];
 
