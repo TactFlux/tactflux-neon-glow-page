@@ -1,105 +1,55 @@
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import Logo from './Logo';
-import { Menu, X } from 'lucide-react';
+import { useAuth } from "@/contexts/AuthContext";
+import { TactFluxLogo } from "./TactFluxLogo";
 
-const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Header = () => {
+  const { user, logout } = useAuth();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-    setIsMenuOpen(false);
-  };
-
-  return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-tactflux-dark bg-opacity-90 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Logo />
-          </div>
-          
-          <div className="hidden md:block">
-            <nav className="flex space-x-10">
-              <button onClick={() => scrollToSection('about-us')} className="text-white hover:text-tactflux-blue transition-colors">
-                Über uns
-              </button>
-              <button onClick={() => scrollToSection('features')} className="text-white hover:text-tactflux-blue transition-colors">
-                Überblick
-              </button>
-              <button onClick={() => scrollToSection('pricing')} className="text-white hover:text-tactflux-blue transition-colors">
-                Abo-Preise
-              </button>
-              <button onClick={() => scrollToSection('contact')} className="text-white hover:text-tactflux-blue transition-colors">
-                Kontakt
-              </button>
-            </nav>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-4">
-            <Button 
-              asChild
-              variant="tactflux-gradient" 
-              className="shadow-lg font-medium rounded-full px-6"
-            >
-              <Link to="/signup">
-                Kostenlosen Account erstellen
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        <Link to="/" className="mr-6 flex items-center space-x-2">
+          <TactFluxLogo className="h-8 w-auto" />
+        </Link>
+        <nav className="flex items-center space-x-6 text-sm font-medium flex-1">
+          <Link to="/" className="transition-colors hover:text-foreground/80">
+            Home
+          </Link>
+          <Link to="/features" className="transition-colors hover:text-foreground/80 hidden sm:block">
+            Features
+          </Link>
+          <Link to="/pricing" className="transition-colors hover:text-foreground/80 hidden sm:block">
+            Preise
+          </Link>
+          <Link to="/contact" className="transition-colors hover:text-foreground/80 hidden sm:block">
+            Kontakt
+          </Link>
+        </nav>
+        <div className="flex items-center justify-end space-x-2">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link to="/admin/dashboard">
+                <Button variant="tactflux">Dashboard</Button>
               </Link>
-            </Button>
-          </div>
-          
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white hover:text-tactflux-blue">
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+              <Button variant="outline" onClick={() => logout()}>Abmelden</Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="outline">Anmelden</Button>
+              </Link>
+              <Link to="/signup">
+                <Button variant="tactflux">Registrieren</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-      
-      {isMenuOpen && <div className="md:hidden bg-tactflux-card bg-opacity-95 backdrop-blur-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <button onClick={() => scrollToSection('about-us')} className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left">
-              Über uns
-            </button>
-            <button onClick={() => scrollToSection('features')} className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left">
-              Überblick
-            </button>
-            <button onClick={() => scrollToSection('pricing')} className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left">
-              Abo-Preise
-            </button>
-            <button onClick={() => scrollToSection('contact')} className="block px-3 py-2 text-white hover:text-tactflux-blue w-full text-left">
-              Kontakt
-            </button>
-            <div className="mt-4">
-              <Button 
-                asChild
-                variant="tactflux-gradient" 
-                className="w-full font-medium rounded-full"
-              >
-                <Link to="/signup">
-                  Jetzt kostenlos starten
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>}
-    </header>;
+    </header>
+  );
 };
 
 export default Header;

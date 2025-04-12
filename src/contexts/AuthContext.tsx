@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 type CompanyInfo = {
   id: string;
@@ -13,22 +14,30 @@ type CompanyInfo = {
   website?: string | null;
 };
 
+type UserRole = {
+  role: string;
+};
+
 type AuthContextType = {
   session: Session | null;
   user: User | null;
   companyInfo: CompanyInfo | null;
+  userRole: UserRole | null;
   loading: boolean;
   refreshCompanyInfo: () => Promise<void>;
   checkAdminStatus: (userId: string) => Promise<boolean>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
   companyInfo: null,
+  userRole: null,
   loading: true,
   refreshCompanyInfo: async () => {},
   checkAdminStatus: async () => false,
+  logout: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -37,6 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchCompanyInfo = async (userId: string) => {
@@ -44,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Hole die Benutzerrolle und die zugehörige Company ID
       const { data: userRole, error: roleError } = await supabase
         .from("user_roles")
-        .select("company_id")
+        .select("company_id, role")
         .eq("user_id", userId)
         .single();
 
@@ -57,6 +67,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error("Keine Firma mit diesem Benutzer verknüpft");
         return;
       }
+
+      // Set user role
+      setUserRole({ role: userRole.role });
 
       // Hole die Firmendaten
       const { data: company, error: companyError } = await supabase
@@ -102,6 +115,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
   };
+  
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      // Clear states
+      setCompanyInfo(null);
+      setUserRole(null);
+      
+      // We don't need to clear session and user as onAuthStateChange will handle that
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Fehler beim Abmelden");
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -116,6 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }, 0);
         } else {
           setCompanyInfo(null);
+          setUserRole(null);
         }
       }
     );
@@ -135,7 +165,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, companyInfo, loading, refreshCompanyInfo, checkAdminStatus }}>
+    <AuthContext.Provider value={{ 
+      session, 
+      user, 
+      companyInfo, 
+      userRole,
+      loading, 
+      refreshCompanyInfo, 
+      checkAdminStatus,
+      logout
+    }}>
       {children}
     </AuthContext.Provider>
   );
