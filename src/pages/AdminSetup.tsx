@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -51,7 +52,7 @@ const AdminSetup = () => {
     setIsLoading(true);
 
     try {
-      // Prüfen, ob der Benutzer existiert
+      // Prüfen, ob der Benutzer existiert, indem wir nach der E-Mail in user_roles suchen
       const { data: userData, error: userError } = await supabase.auth.getUser();
 
       if (userError) {
@@ -60,26 +61,16 @@ const AdminSetup = () => {
 
       let userId = userData?.user?.id;
 
-      // Wenn kein Benutzer angemeldet ist, nach dem Benutzer in der auth.users-Tabelle suchen
+      // Wenn kein Benutzer angemeldet ist, müssen wir anders vorgehen
       if (!userId) {
-        const { data: authUser, error: authUserError } = await supabase
-          .from("auth.users")
-          .select("id")
-          .eq("email", email)
-          .single();
-
-        if (authUserError) {
-          // Benutzer existiert nicht, wir müssen dich informieren
-          toast.error("Benutzer existiert nicht. Bitte registrieren Sie sich zuerst.", {
-            description: "Nutzen Sie die Registrierungsseite, um einen Account anzulegen."
-          });
-          setIsLoading(false);
-          return;
-        }
-
-        if (authUser) {
-          userId = authUser.id;
-        }
+        toast.info("Sie müssen sich zuerst registrieren, bevor Sie Adminrechte zuweisen können.", {
+          description: "Bitte registrieren Sie sich unter /signup und versuchen Sie es dann erneut."
+        });
+        setIsLoading(false);
+        setTimeout(() => {
+          navigate("/signup");
+        }, 3000);
+        return;
       }
 
       // Prüfen, ob bereits eine Rollenzuweisung für diesen Benutzer existiert
@@ -153,12 +144,12 @@ const AdminSetup = () => {
               <label htmlFor="email" className="text-sm font-medium text-white">
                 E-Mail-Adresse
               </label>
-              <input
+              <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 rounded-md bg-tactflux-input border border-tactflux-border text-white"
+                className="bg-tactflux-input border border-tactflux-border text-white"
               />
             </div>
             <div className="space-y-2">
