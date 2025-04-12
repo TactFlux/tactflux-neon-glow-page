@@ -39,8 +39,8 @@ const formSchema = z.object({
     .regex(/[0-9]/, {
       message: "Das Passwort muss mindestens eine Zahl enthalten.",
     }),
-  terms: z.boolean().refine((val) => val === true, {
-    message: "Sie müssen die AGB akzeptieren.",
+  terms: z.literal(true, {
+    errorMap: () => ({ message: "Sie müssen die AGB akzeptieren." }),
   }),
 });
 
@@ -169,18 +169,18 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-tactflux-dark text-white">
       <Header />
       <div className="container mx-auto px-4 pt-24 pb-12">
-        <div className="max-w-md mx-auto bg-card p-8 rounded-lg shadow-lg border border-border">
+        <div className="max-w-md mx-auto bg-tactflux-card p-8 rounded-lg shadow-lg border border-tactflux-border">
           <div className="mb-6 text-center">
             <div className="flex justify-center mb-4">
               <Logo />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-white">
               {currentStep === 1 ? "Konto erstellen" : "Unternehmensdaten"}
             </h1>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-gray-300 mt-2">
               {currentStep === 1
                 ? "Erstellen Sie Ihr persönliches Konto bei TactFlux"
                 : "Teilen Sie uns mehr über Ihr Unternehmen mit"}
@@ -195,13 +195,13 @@ const Signup = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>E-Mail</FormLabel>
+                      <FormLabel className="text-white">E-Mail</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="ihre.email@beispiel.de"
                           {...field}
                           autoComplete="email"
-                          className="bg-secondary text-foreground"
+                          className="bg-tactflux-input border-tactflux-border text-white"
                         />
                       </FormControl>
                       <FormMessage />
@@ -213,17 +213,17 @@ const Signup = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Passwort</FormLabel>
+                      <FormLabel className="text-white">Passwort</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
                           placeholder="••••••••"
                           {...field}
                           autoComplete="new-password"
-                          className="bg-secondary text-foreground"
+                          className="bg-tactflux-input border-tactflux-border text-white"
                         />
                       </FormControl>
-                      <FormDescription className="text-muted-foreground">
+                      <FormDescription className="text-gray-400">
                         Mindestens 8 Zeichen, ein Großbuchstabe, ein
                         Kleinbuchstabe und eine Zahl.
                       </FormDescription>
@@ -240,10 +240,11 @@ const Signup = () => {
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          className="data-[state=checked]:bg-tactflux-blue"
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
-                        <FormLabel className="text-foreground">
+                        <FormLabel className="text-white">
                           Ich akzeptiere die{" "}
                           <a
                             href="#"
@@ -286,9 +287,13 @@ const Signup = () => {
                   name="companyName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Firmenname</FormLabel>
+                      <FormLabel className="text-white">Firmenname</FormLabel>
                       <FormControl>
-                        <Input placeholder="TactFlux GmbH" {...field} />
+                        <Input 
+                          placeholder="TactFlux GmbH" 
+                          {...field} 
+                          className="bg-tactflux-input border-tactflux-border text-white"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -299,9 +304,13 @@ const Signup = () => {
                   name="industry"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Branche</FormLabel>
+                      <FormLabel className="text-white">Branche</FormLabel>
                       <FormControl>
-                        <Input placeholder="IT, Gesundheit, etc." {...field} />
+                        <Input 
+                          placeholder="IT, Gesundheit, etc." 
+                          {...field} 
+                          className="bg-tactflux-input border-tactflux-border text-white"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -312,10 +321,10 @@ const Signup = () => {
                   name="companySize"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unternehmensgröße</FormLabel>
+                      <FormLabel className="text-white">Unternehmensgröße</FormLabel>
                       <FormControl>
                         <select
-                          className="flex h-10 w-full rounded-md border border-input bg-secondary text-foreground px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="flex h-10 w-full rounded-md border border-tactflux-border bg-tactflux-input text-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tactflux-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           {...field}
                         >
                           <option value="1-10">1-10 Mitarbeiter</option>
@@ -333,12 +342,13 @@ const Signup = () => {
                   name="companyEmail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Firmen-E-Mail</FormLabel>
+                      <FormLabel className="text-white">Firmen-E-Mail</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="kontakt@ihrefirma.de"
                           {...field}
                           autoComplete="email"
+                          className="bg-tactflux-input border-tactflux-border text-white"
                         />
                       </FormControl>
                       <FormMessage />
@@ -350,11 +360,12 @@ const Signup = () => {
                   name="website"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Website (optional)</FormLabel>
+                      <FormLabel className="text-white">Website (optional)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://www.ihrefirma.de"
                           {...field}
+                          className="bg-tactflux-input border-tactflux-border text-white"
                         />
                       </FormControl>
                       <FormMessage />
@@ -365,7 +376,7 @@ const Signup = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 border-tactflux-border text-white bg-transparent hover:bg-tactflux-input hover:text-white"
                     onClick={() => setCurrentStep(1)}
                     disabled={isLoading}
                   >
@@ -390,4 +401,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
