@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -67,9 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Check if user is superadmin
-      if (userRole?.role === 'superadmin') {
+      if (userRole?.role === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: 'superadmin' });
+        setUserRole({ role: "superadmin" });
         
         // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
@@ -142,7 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
   };
-  
+
   const logout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
