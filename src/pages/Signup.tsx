@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,8 +38,8 @@ const formSchema = z.object({
     .regex(/[0-9]/, {
       message: "Das Passwort muss mindestens eine Zahl enthalten.",
     }),
-  terms: z.literal(true, {
-    errorMap: () => ({ message: "Sie müssen die AGB akzeptieren." }),
+  terms: z.boolean().refine((val) => val === true, {
+    message: "Sie müssen die AGB akzeptieren."
   }),
 });
 
@@ -120,7 +119,6 @@ const Signup = () => {
 
     setIsLoading(true);
     try {
-      // Erstelle Firmeneintrag
       const { data: companyData, error: companyError } = await supabase
         .from("companies")
         .insert({
@@ -140,7 +138,6 @@ const Signup = () => {
         return;
       }
 
-      // Verknüpfe Benutzer mit Firma
       const { error: roleError } = await supabase.from("user_roles").insert({
         user_id: userId,
         company_id: companyData.id,
@@ -158,7 +155,6 @@ const Signup = () => {
         description: "Ihr Konto wurde erfolgreich erstellt.",
       });
 
-      // Weiterleitung zum Dashboard
       window.location.href = "/admin/dashboard";
     } catch (error) {
       console.error("Company registration error:", error);
