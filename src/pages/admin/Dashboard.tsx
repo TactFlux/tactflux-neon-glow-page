@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import FeatureGate from '@/components/FeatureGate';
-import { FileTextIcon, FileSpreadsheetIcon, KeyIcon, BarChart4Icon } from 'lucide-react';
+import { FileTextIcon, FileSpreadsheetIcon, KeyIcon, BarChart4Icon, CreditCardIcon } from 'lucide-react';
 
 type Company = {
   id: string;
@@ -21,12 +21,11 @@ type Company = {
 };
 
 const AdminDashboard = () => {
-  const { isSuperAdmin, companyInfo } = useAuth();
+  const { isSuperAdmin, companyInfo, userRole } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // If user is superadmin, fetch all companies
     if (isSuperAdmin) {
       const fetchAllCompanies = async () => {
         setLoading(true);
@@ -73,8 +72,20 @@ const AdminDashboard = () => {
             Admin Dashboard {isSuperAdmin && <span className="text-red-400 ml-2">(Superadmin)</span>}
           </h1>
           {companyInfo && (
-            <div className="mt-1 text-sm text-gray-300">
-              Plan: <span className="font-medium text-tactflux-blue">{companyInfo.plan}</span>
+            <div className="mt-1 text-sm text-gray-300 flex items-center gap-3">
+              Plan: <Badge className={
+                companyInfo.plan === 'enterprise' ? 'bg-purple-500' : 
+                companyInfo.plan === 'pro' ? 'bg-blue-500' : 
+                'bg-gray-500'
+              }>{companyInfo.plan}</Badge>
+              {userRole?.role === 'admin' && (
+                <Link to="/admin/billing">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2">
+                    <CreditCardIcon className="h-4 w-4" />
+                    Plan verwalten
+                  </Button>
+                </Link>
+              )}
             </div>
           )}
         </header>

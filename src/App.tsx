@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminBilling from "./pages/admin/Billing";
 import AdminSetup from "./pages/AdminSetup";
 import Unauthorized from "./pages/Unauthorized";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/billing" element={<AdminBilling />} />
             <Route path="/admin-setup" element={<AdminSetup />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
