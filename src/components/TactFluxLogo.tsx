@@ -2,9 +2,13 @@
 import React from 'react';
 import Logo from './Logo';
 
-export const TactFluxLogo: React.FC = () => {
+interface TactFluxLogoProps {
+  className?: string;
+}
+
+export const TactFluxLogo: React.FC<TactFluxLogoProps> = ({ className }) => {
   return (
-    <div className="flex items-center">
+    <div className={`flex items-center ${className || ''}`}>
       <Logo />
     </div>
   );
