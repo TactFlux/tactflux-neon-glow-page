@@ -27,6 +27,7 @@ type AuthContextType = {
   refreshCompanyInfo: () => Promise<void>;
   checkAdminStatus: (userId: string) => Promise<boolean>;
   logout: () => Promise<void>;
+  isSuperAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -38,6 +39,7 @@ const AuthContext = createContext<AuthContextType>({
   refreshCompanyInfo: async () => {},
   checkAdminStatus: async () => false,
   logout: async () => {},
+  isSuperAdmin: false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -48,6 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
 
   const fetchCompanyInfo = async (userId: string) => {
     try {
@@ -62,6 +65,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error("Fehler beim Abrufen der Benutzerrolle:", roleError);
         return;
       }
+
+      // Check if user is superadmin
+      if (userRole?.role === 'superadmin') {
+        setIsSuperAdmin(true);
+        setUserRole({ role: 'superadmin' });
+        
+        // For superadmin, get the first company as default view
+        const { data: companies, error: companiesError } = await supabase
+          .from("companies")
+          .select("*")
+          .limit(1)
+          .single();
+          
+        if (companiesError) {
+          console.error("Fehler beim Abrufen der Firmendaten für Superadmin:", companiesError);
+          return;
+        }
+        
+        setCompanyInfo(companies as CompanyInfo);
+        return;
+      }
+      
+      // Regular user/admin flow
+      setIsSuperAdmin(false);
 
       if (!userRole?.company_id) {
         console.error("Keine Firma mit diesem Benutzer verknüpft");
@@ -101,7 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
-        .eq("role", "admin")
+        .in("role", ["admin", "superadmin"])
         .maybeSingle();
 
       if (error) {
@@ -109,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }
 
-      return data?.role === "admin";
+      return data?.role === "admin" || data?.role === "superadmin";
     } catch (error) {
       console.error("Fehler bei der Überprüfung des Admin-Status:", error);
       return false;
@@ -124,6 +151,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Clear states
       setCompanyInfo(null);
       setUserRole(null);
+      setIsSuperAdmin(false);
       
       // We don't need to clear session and user as onAuthStateChange will handle that
     } catch (error) {
@@ -146,6 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setCompanyInfo(null);
           setUserRole(null);
+          setIsSuperAdmin(false);
         }
       }
     );
@@ -173,7 +202,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       loading, 
       refreshCompanyInfo, 
       checkAdminStatus,
-      logout
+      logout,
+      isSuperAdmin
     }}>
       {children}
     </AuthContext.Provider>

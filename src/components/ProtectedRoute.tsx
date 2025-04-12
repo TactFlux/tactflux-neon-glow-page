@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children, 
   requiredRole 
 }) => {
-  const { user, loading, userRole } = useAuth();
+  const { user, loading, userRole, isSuperAdmin } = useAuth();
 
   // Show loading state while checking authentication
   if (loading) {
@@ -26,6 +26,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Redirect to login if not authenticated
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Superadmin can access any route
+  if (isSuperAdmin) {
+    return <>{children}</>;
   }
 
   // Check role if a specific role is required
