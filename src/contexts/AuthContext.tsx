@@ -14,7 +14,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Definition des AppRole-Typs mit "superadmin"
+// Updated AppRole type to include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
@@ -68,12 +68,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Explizit den Typ von userRole.role als AppRole definieren
+      // Now that AppRole includes "superadmin", we can safely assign it
       const userRoleValue = userRole?.role as AppRole;
       
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: "superadmin" as AppRole });
+        setUserRole({ role: userRoleValue });
         
         const { data: companies, error: companiesError } = await supabase
           .from("companies")
