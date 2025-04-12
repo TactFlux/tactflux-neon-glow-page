@@ -13,7 +13,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Modify the AppRole type to include "superadmin"
+// Update the AppRole type to include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
@@ -56,7 +56,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchCompanyInfo = async (userId: string) => {
     try {
-      // Hole die Benutzerrolle und die zugehörige Company ID
       const { data: userRole, error: roleError } = await supabase
         .from("user_roles")
         .select("company_id, role")
@@ -68,15 +67,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Check if user is superadmin
-      // Use a string comparison for the role value
       const userRoleValue = userRole?.role as string;
       if (userRoleValue === "superadmin") {
         setIsSuperAdmin(true);
-        // Now that AppRole includes "superadmin", we can assign it directly
         setUserRole({ role: "superadmin" });
         
-        // For superadmin, get the first company as default view
         const { data: companies, error: companiesError } = await supabase
           .from("companies")
           .select("*")
@@ -92,7 +87,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Regular user/admin flow
       setIsSuperAdmin(false);
 
       if (!userRole?.company_id) {
@@ -100,10 +94,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Set user role - cast to our AppRole type
       setUserRole({ role: userRole.role as AppRole });
 
-      // Hole die Firmendaten
       const { data: company, error: companyError } = await supabase
         .from("companies")
         .select("*")
@@ -141,7 +133,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }
 
-      // Use string comparison to check the role value
       const roleValue = data?.role as string;
       return roleValue === "admin" || roleValue === "superadmin";
     } catch (error) {
@@ -155,7 +146,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      // Clear states
       setCompanyInfo(null);
       setUserRole(null);
       setIsSuperAdmin(false);
@@ -168,7 +158,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -186,7 +175,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
