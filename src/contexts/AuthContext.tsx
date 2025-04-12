@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
@@ -14,7 +13,7 @@ type CompanyInfo = {
   website?: string | null;
 };
 
-// Updated AppRole type to include "superadmin"
+// Updated AppRole type to explicitly include "superadmin"
 type AppRole = "user" | "admin" | "member" | "superadmin";
 
 type UserRole = {
@@ -68,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Fix for line 130: Make sure to properly type all roles
+      // Safely cast role to AppRole, ensuring "superadmin" is included
       const roleValue: AppRole = userRole?.role as AppRole;
       
       if (roleValue === "superadmin") {
