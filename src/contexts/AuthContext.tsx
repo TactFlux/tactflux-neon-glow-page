@@ -68,12 +68,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Now that AppRole includes "superadmin", we can safely assign it
-      const userRoleValue = userRole?.role as AppRole;
+      // Fix for line 130: Make sure to properly type all roles
+      const roleValue: AppRole = userRole?.role as AppRole;
       
-      if (userRoleValue === "superadmin") {
+      if (roleValue === "superadmin") {
         setIsSuperAdmin(true);
-        setUserRole({ role: userRoleValue });
+        setUserRole({ role: roleValue });
         
         const { data: companies, error: companiesError } = await supabase
           .from("companies")
@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       setIsSuperAdmin(false);
-      setUserRole({ role: userRoleValue });
+      setUserRole({ role: roleValue });
 
       if (!userRole?.company_id) {
         console.error("Keine Firma mit diesem Benutzer verknüpft");
