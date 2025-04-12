@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 // Form schema für Validierung
 const formSchema = z.object({
@@ -89,18 +90,19 @@ const Signup = () => {
         throw new Error("Benutzer konnte nicht erstellt werden");
       }
 
+      // Konvertiere den companySize-Wert in den korrekten Enum-Typ
+      const companySize = values.companySize as Database["public"]["Enums"]["company_size"];
+      
       // 2. Erstelle Unternehmen in der companies Tabelle
       const { data: companyData, error: companyError } = await supabase
         .from('companies')
-        .insert([
-          {
-            name: values.companyName,
-            industry: values.industry,
-            size: values.companySize,
-            website: values.website || null,
-            email: values.email,
-          }
-        ])
+        .insert({
+          name: values.companyName,
+          industry: values.industry,
+          size: companySize,
+          website: values.website || null,
+          email: values.email,
+        })
         .select('id')
         .single();
 
@@ -109,13 +111,11 @@ const Signup = () => {
       // 3. Erstelle Benutzerrolle in der user_roles Tabelle
       const { error: roleError } = await supabase
         .from('user_roles')
-        .insert([
-          {
-            user_id: authData.user.id,
-            company_id: companyData.id,
-            role: 'admin',
-          }
-        ]);
+        .insert({
+          user_id: authData.user.id,
+          company_id: companyData.id,
+          role: 'admin',
+        });
 
       if (roleError) throw roleError;
 
